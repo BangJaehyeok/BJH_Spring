@@ -1,4 +1,43 @@
-#### 20210824 (수) 작업
+#### 20210826 (목) 작업
+- public String doInfo(HttpServletRequest hsr, Model model) {
+		String uid=hsr.getParameter("userid");
+		String addr=hsr.getParameter("address");
+- 원래는 위처럼 쓰는 거지만
+		
+- public String doInfo(@RequestParam("userid") String uid, 
+			@RequestParam("address") String addr, Model model) {	
+- @RequestParam을 이용해 이렇게 쓸 수도 있다.
+- 그러나 @RequestParam은 값이 강제로 지정되서 무조껀 쓰이게 된다. 그리고 코딩이 너무 길어진다. 그래서 보통은 위의 방법을 많이 쓴다. 필요할때 값을 가져와 쓸 수 있기 때문.
+
+- 만약 Parameter를 통해 지정해줘야할 값들이 너무 많다면 코딩이 길어지고 지저분해진다. 그래서 클래스를 하나 만들어서 거기에 ParamList라고해서 파라미터 객체들을 만들어준다.
+- 그래서 클래스에 해당하는 변수를 지정하고 그 변수를 이용해 간단하게 호출해준다.
+- Command 객체라고한다.
+
+- public String doInfo(ParamList pl, Model model) {		
+		System.out.println("uid="+pl.userid);
+		System.out.println("addr="+pl.address);
+		model.addAttribute("loginid",pl.userid);
+		model.addAttribute("region",pl.address);
+- 많이 쓰이지는 않는다.
+
+- GET/POST방식으로 전달된 데이터를 Spring Framework에서 받는 방법
+1. HttpServletRequest
+2. @RequestParam
+3. Command object
+4. @PathVariable <- RestAPI
+
+- RestAPI 특징 : 전송되는 데이터가 감춰진다.(데이터 은닉) 
+- ?,&, = 을 사용안하고 /으로 연결함.
+
+- 데이터를 전송하고 받을 때 서로의 데이터 전송방식이 같아야한다.
+- 즉, GET방식인지 POST방식인지 서로 일치해야 에러없이 받을 수 있다.
+
+- redirect:요청경로명  요청경로명으로 돌아가라는 뜻.
+	
+
+
+
+#### 20210825 (수) 작업
 - STS : Spring Tool Suite
 - Spring 3까지는 일반 스프링
 - Spring 4부터는 Spring Boot라고 한다.

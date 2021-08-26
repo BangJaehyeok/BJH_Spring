@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>선택</title>
+<title>Today</title>
 </head>
 <body>
-<a href='selected?path=login'>로그인하기</a>&nbsp;&nbsp;
-<a href='selected?path=newbie'> 회원가입 </a>
+userid: ${uid}<br>
+address: ${addr}
 </body>
 </html>
