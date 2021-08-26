@@ -4,10 +4,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Information</title>
+<title>viewinfo</title>
 </head>
 <body>
-<p>${loginid}</p>
-<p>${region}</p>
+<p>ID는 ${userid}</p>
+<p>PW는 ${passcode}</p>
+<button type="button" onclick="location.href='home'">돌아가기</button>	
+
 </body>
 </html>

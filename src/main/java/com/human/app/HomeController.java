@@ -17,14 +17,26 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 		
-	@RequestMapping("/info")
-	public String doInfo(ParamList pl, Model model) {		
-		System.out.println("uid="+pl.userid);
-		System.out.println("addr="+pl.address);
-		model.addAttribute("loginid",pl.userid);
-		model.addAttribute("region",pl.address);
-		//userid->uid->loginid, address->addr->region
-		return "viewinfo";		
+	@RequestMapping("/viewinfo")
+	public String doInfo(HttpServletRequest hsr, Model model) {
+		String uid=hsr.getParameter("userid");
+		String pw=hsr.getParameter("passcode");		
+		model.addAttribute("userid",uid);
+		model.addAttribute("passcode",pw);		
+		return "viewinfo";
+	}
+	
+	@RequestMapping("/newinfo")
+	public String doJoin(HttpServletRequest hsr, Model model) {
+		String uid=hsr.getParameter("userid");
+		String pw=hsr.getParameter("passcode");	
+		String name=hsr.getParameter("realname");
+		String mobile=hsr.getParameter("mobile");		
+		model.addAttribute("userid",uid);
+		model.addAttribute("passcode",pw);
+		model.addAttribute("realname",name);
+		model.addAttribute("mobile",mobile);
+		return "newinfo";
 	}
 	
 	@RequestMapping("/getinfo")
@@ -39,18 +51,12 @@ public class HomeController {
 	@RequestMapping("/selected")
 	public String doJob(@RequestParam("path") String strPath) {		
 		if(strPath.equals("login")) {
-			return "getinfo";
+			return "login";
 		}else if(strPath.equals("newbie")) {
 			return "newbie";
 		} else {
 			return "choose";
 		}		
 	}
-	@RequestMapping("/today/{address}/{userid}")
-	public String showNumber(@PathVariable String address,
-							@PathVariable String userid, Model model) {
-		model.addAttribute("addr",address);
-		model.addAttribute("uid",userid);
-		return "today";
-	}
+	
 }

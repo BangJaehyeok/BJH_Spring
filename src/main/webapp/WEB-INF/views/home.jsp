@@ -7,7 +7,7 @@
 <title>선택</title>
 </head>
 <body>
-<a href='selected?path=login'>로그인하기</a>&nbsp;&nbsp;
+<a href='selected?path=login'>로그인</a>&nbsp;&nbsp;
 <a href='selected?path=newbie'> 회원가입 </a>
 </body>
 </html>
