@@ -7,6 +7,7 @@
 <title>viewinfo</title>
 </head>
 <body>
+로그인에 성공하셨습니다.
 <p>ID는 ${userid}</p>
 <p>PW는 ${passcode}</p>
 <button type="button" onclick="location.href='home'">돌아가기</button>	

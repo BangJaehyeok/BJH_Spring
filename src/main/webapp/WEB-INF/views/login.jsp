@@ -9,7 +9,7 @@
 <body>
 <p>로그인</p>	
 	<form method=get action="/app/viewinfo">	
-	아이디 : <input type=text name=userid><br>
+	ID : <input type=text name=userid><br>
 	PW : <input type=password name=passcode><br><br>
 	<input type=submit value='로그인'>&nbsp;
 	<button type="button" onclick="location.href='home'">돌아가기</button>	

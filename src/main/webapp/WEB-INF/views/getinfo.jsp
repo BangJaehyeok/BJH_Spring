@@ -6,11 +6,41 @@
 <meta charset="UTF-8">
 <title>Get Info</title>
 </head>
+<style>
+td{
+	width:50px;
+	height:30px;
+}
+</style>
 <body>
-<form method="GET" action="/app/info">
-	<input type=text name=userid><br>
-	<input type=text name=address><br><br>
-	<input type=submit value="전송">
-</form>
+<table border=1>
+
+<%! int k=1; %> 
+<%
+	int k=1;
+	for(int i=0;i<5;i++){
+		out.println("<tr>");
+		for(int j=0;j<4;j++){
+			out.println("<td align=center>"+k+"</td>");
+			k++;
+		}
+		out.println("</tr>");
+	}
+%>
+<%
+	for(int i=0;i<5;i++){
+%>
+<tr>
+<%
+	for(int j=0;j<4;j++){
+%>
+<td align=center><%=k %></td>
+<%
+	k++;
+	}
+	out.println("</tr>");
+	}
+%>
+</table>
 </body>
 </html>

@@ -7,7 +7,8 @@
 <title>회원가입정보</title>
 </head>
 <body>
-<p>회원가입정보</p>
+회원가입에 성공하셨습니다.
+<p><회원가입정보></p>
 ID : ${userid }<br>
 PW : ${ passcode}<br>
 이름 : ${realname }<br>

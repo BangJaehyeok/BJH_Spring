@@ -7,7 +7,7 @@
 <title>선택</title>
 </head>
 <body>
-<a href='selected?path=login'>로그인</a>&nbsp;&nbsp;
-<a href='selected?path=newbie'> 회원가입 </a>
+<button type="button" onclick="location.href='selected?path=login'">  로그인  </button>&nbsp;&nbsp;
+<button type="button" onclick="location.href='selected?path=newbie'">  회원가입  </button>
 </body>
 </html>
