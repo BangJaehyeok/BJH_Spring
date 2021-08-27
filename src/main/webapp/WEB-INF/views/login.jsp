@@ -8,7 +8,7 @@
 </head>
 <body>
 <p>로그인</p>	
-	<form method=get action="/app/viewinfo">	
+	<form method=post action="/app/check_user">	
 	ID : <input type=text name=userid><br>
 	PW : <input type=password name=passcode><br><br>
 	<input type=submit value='로그인'>&nbsp;

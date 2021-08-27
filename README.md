@@ -1,3 +1,58 @@
+#### 20210827 (금) 작업
+- 세션(Session) : 개인정보, 웹서버에 보관, 객체(변수)
+- JSP 내장객체(Built-in Object) : 별도 선언안하고 쓸 수 있는 것
+- 입출력 out, request, response
+- 서블릿 page, config
+- 외부환경정보 session, application, pageContext
+- 예외처리 exception
+
+- 세션(session) : 여러 웹페이지에서 공유하는 정보.
+- 홈컨트롤러의 맨위에 클래스필드로서 정의해놓음. private HttpSession session;
+- session.invalidate(); <- 모든 세션변수 삭제됨.
+
+- 세션이 삭제되는 경우
+1. session.invalidate();
+2. 웹브라우저를 닫아버리면 자동소멸
+3. 다른 웹사이트로 이동하면 세션이 사라짐.
+4. 웹서버가 다운되면 소멸.
+
+- 세션 생성 : session.setAttribute("userid",loginid);
+
+- HomeController에서의 Session : Session을 세팅
+1. HttpSession 변수 하나를 선언&초기화(
+2. HttpSession session=(HttpServletRequest) hsr.getSession();
+3. session.setAttribute("변수명",값)
+
+- JSP with scriptlet
+<% 
+	String 변수=(String)session.getAttribute("변수명");
+	if(변수값 검사){}else{}
+ %>
+ 
+- return "redirect:/booking"; <- RequestMapping의 경로 이름	즉, booking으로 가는 RequestMapping을 거치게 한다.
+- return "booking"; <- JSP 파일 이름	
+
+- public String check_user(HttpServletRequest hsr, Model model) {
+		String userid=hsr.getParameter("userid");
+		String passcode=hsr.getParameter("passcode");
+		session=hsr.getSession();
+- session을 사용하기 위해서는 HttpServletRequest를 통해 데이터를 받아들이고, 
+getSession();을 지정해줘서 세션을 쓸 준비를 해놔야 세션을 사용할 수 있다. 
+- HttpServletRequest는 데이터를 받아들이는 역할이다. 
+
+- RequestMapping booking안에 userid/passcode를 체킹하지 않고, RequestMapping Check_user를 새로 만들어서 거기서 체크하게 만든다.
+- Controller에서 바로 login 후 booking을 가는 것이 아니라,
+- 그 중간에 check하는 곳을 만들어서 여기서 userid/passcode check하게하는 session을 만든다.
+- 그렇게 해야 booking.jsp와 room.jsp간 이동이 매우 자유롭다.
+- 그 전에는 리퀘스트 booking 안에 POST로 받아 체킹을 하다보니 GET방식인 room과 데이터 전송방식이 달라 이동에 있어 오류가 났다.
+- 원래 RequestMapping의 booking안에서 userid/passcode를 체크하게 시켰는데 그런 것이 아니라 check_user를 만들어서 거길 통과시켜서 맞으면 booking을 보여주게한다. 그래서 booking에서 room을갈때, room에서 booking으로 갈때 서로 GET/POST방식의 차이가 없기 때문에 이동이 자유로워진다.
+- 그래서 check_user에서 return값을 redirect:/로 booking을 지정해서 check_user로 아이디와 비밀번호를 체킹한 후 RequestMapping booking으로 보낸다.
+
+- room의 리퀘스트 매핑에는 loginid==null값이 될 경우를 만들어준다. 다른웹사이트가면 세션이 초기화된다. 그래서 null값이 될경우를 써준다.
+
+- 되도록이면 거의 모든 작업을 컨트롤러로 해주는게 이상적이다. jsp에서 하면 지저분해진다.
+
+		
 #### 20210826 (목) 작업
 - public String doInfo(HttpServletRequest hsr, Model model) {
 		String uid=hsr.getParameter("userid");
