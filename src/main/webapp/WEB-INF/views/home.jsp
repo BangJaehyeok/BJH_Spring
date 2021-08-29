@@ -7,13 +7,18 @@
 <title>선택</title>
 </head>
 <body>
-<h1>HOME</h1>
-<p>로그인</p>	
+<h1 style="text-align: center; font-size:40px; margin-top: 5%;">HOME</h1>
+<div style="margin-left: auto; margin-right: auto;
+ width: 400px; height: 250px; 
+border: 1px solid black; margin-top: 5%;">
+<p style="text-align: center; font-size:larger; font-weight:1000; padding-top: 20px;">관리자 로그인</p>
 	<form method=post action="/app/check_user">	
-	ID : <input type=text name=userid><br>
-	PW : <input type=password name=passcode><br><br>
+	<p style="text-align: center;">ID : <input type=text name=userid></p1><br>
+	<p style="text-align: center;">PW : <input type=password name=passcode></p1><br><br>
 	<input type=submit value='로그인'>&nbsp;
 	<button type="button" onclick="location.href='selected?path=newbie'">  회원가입  </button>	
+	
 </form>
+</div>
 </body>
 </html>
