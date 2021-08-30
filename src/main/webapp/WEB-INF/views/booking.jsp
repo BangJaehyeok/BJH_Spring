@@ -25,7 +25,7 @@
     <div id="header">
         <h1 style="font-size: 45px;">관리자홈페이지-예약관리</h1><br>
         <h2 style="font-size: 20px;"><a href="booking">예약관리</a>  
-        <a href="#"><u>객실관리</u></a></h2>
+        <a href="room"><u>객실관리</u></a></h2>
     </div>    
     
     <div id="nav2">        
