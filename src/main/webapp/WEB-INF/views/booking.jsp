@@ -18,53 +18,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>예약관리</title>
     <link href="${path}/resources/css/style.css" rel="stylesheet" type="text/css">
-    <style>
-        .menu a{cursor:pointer;}
-        .menu .hide{display:none;}
-    </style>
+    
 </head>
 <body>
+    <button type="button" style="float:right;" onclick="location.href='home'">  로그아웃  </button>
     <div id="header">
         <h1 style="font-size: 45px;">관리자홈페이지-예약관리</h1><br>
-        <h2 style="font-size: 20px;"><a href="#">예약관리</a>  
-        <a href="room"><u>객실관리</u></a></h2>
+        <h2 style="font-size: 20px;"><a href="booking">예약관리</a>  
+        <a href="#"><u>객실관리</u></a></h2>
     </div>    
-    <button type="button" style="float:right;" onclick="location.href='home'">  로그아웃  </button>
+    
     <div id="nav2">        
         <div id="findRoom">
         <h2>숙박기간</h2>
-        <input type="date">~<input type="date">
+        <input type="date" id="date1" min="2021-08-30">~
+        <input type="date" id="date2" min="2021-08-30">
         <h2>객실분류</h2>
-        <select size="3" style="width: 100px; font-size: 15px;" multiple><br>
+        <select size="4" style="width: 150px; font-size: 16px;" multiple><br>
             <option>백두산</option>
             <option>한라산</option>
             <option>설악산</option>
             <option>지리산</option>
-            <option>북한산</option>
-            <option>태조산</option>
-            <option>남산</option>            
+            <option>북한산</option>                        
            </select> 
            <input type="button" value="찾기">          
 
         </div>
         <div id="reserveRoom">
         <h2>예약가능한 객실</h2>
-            <h3>백두산 Suite Room 4명</h3>
-        <h3>한라산 Family Room 6명</h3>
-        <h3>설악산 Double Room 4명</h3>
-        <h3>지리산 Single Room 2명</h3>
-        <h3>북한산 Single Room 2명</h3>
-        <h3>태조산 Single Room 2명</h3>
-        <h3>남산 Single Room 2명</h3>
+        <select id="reserveRoom2" size="6" style="width: 250px; height: 250px; font-size: 18px;"><br>
+            <option id="room1">백두산 SuiteRoom</option>
+            <option id="room2">한라산 FamilyRoom</option>
+            <option id="room3">설악산 DoubleRoom</option>
+            <option id="room4">지리산 SingleRoom</option>
+            <option id="room5">북한산 SingleRoom</option>
+        </select>   
         </div>
     </div>
     <div id="sectionMenu2">
         <h2>객실이름</h2>
-        <input type="text" value="">
+        <input type="text" id="roomname" value="">
         <h2>숙박기간</h2>
-        <input type="date">~<input type="date">
+        <input type="date" id="date3" min="2021-08-30">~
+        <input type="date" id="date4" min="2021-08-30">
         <h2>숙박인원</h2>
-        <input type="number">
+        <input id="roompeople" type="number">
         <h2>1박요금</h2>
         <input type="text" id="roomPrice">원
         <h2>총 숙박비</h2>
@@ -77,18 +75,41 @@
     </div>
     <div id="section2">
         <h2 style="font-size: 22px;">예약된 객실</h2>
-        <select size="8" style="width: 200px; font-size: 20px;" multiple><br>
-            <option>백두산</option>
-            <option>한라산</option>
-            <option>설악산</option>
-            <option>지리산</option>
-            <option>북한산</option>
-            <option>태조산</option>
-            <option>남산</option>
-           </select>
+        <div style="width: 100%; height: 600px; text-align: left;float: left;    
+        margin-left: 0px; border: 1px black solid;">
     </div>
     <div id="footer2">       
     </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script>
+$(document)
+
+.on('dblclick','#room1',function(){
+    $('#roomname').val('백두산');    
+    $('#roomPrice').val('400,000');       
+    return false;
+})
+.on('dblclick','#room2',function(){
+    $('#roomname').val('한라산');    
+    $('#roomPrice').val('250,000');
+    return false;
+})
+.on('dblclick','#room3',function(){
+    $('#roomname').val('설악산');
+    $('#roomPrice').val('150,000');
+    return false;
+})
+.on('dblclick','#room4',function(){
+    $('#roomname').val('지리산');
+    $('#roomPrice').val('85,000');
+    return false;
+})
+.on('dblclick','#room5',function(){
+    $('#roomname').val('북한산');    
+    $('#roomPrice').val('75,000');
+    return false;
+})
+</script>
 
 </html>

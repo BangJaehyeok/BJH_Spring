@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatisd.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.human.app.iRoom">
+	<select id="getRoomList" resultType="com.human.app.Roominfo">
+		select roomcode,name,type,howmany,howmuch from room order by roomcode
+	</select>
+</mapper>

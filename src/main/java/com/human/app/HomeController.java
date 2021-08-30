@@ -1,10 +1,14 @@
 package com.human.app;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +25,9 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	private HttpSession session;
 	
+	@Autowired
+	private SqlSession sqlSession;
+	
 	@RequestMapping("/viewinfo")
 	public String doInfo(HttpServletRequest hsr, Model model) {
 		String uid=hsr.getParameter("userid");
@@ -35,11 +42,13 @@ public class HomeController {
 		String uid=hsr.getParameter("userid");
 		String pw=hsr.getParameter("passcode");	
 		String name=hsr.getParameter("realname");
-		String mobile=hsr.getParameter("mobile");		
+		String mobile=hsr.getParameter("mobile");
+		String address=hsr.getParameter("address");
 		model.addAttribute("userid",uid);
 		model.addAttribute("passcode",pw);
 		model.addAttribute("realname",name);
 		model.addAttribute("mobile",mobile);
+		model.addAttribute("address",address);
 		return "newinfo";
 	}
 	
@@ -51,6 +60,7 @@ public class HomeController {
 	public String check_user(HttpServletRequest hsr) {
 		String userid=hsr.getParameter("userid");
 		String passcode=hsr.getParameter("passcode");
+		//DB에서 유저 확인 : 기존 유저면 booking으로, 없으면 home으로
 		session=hsr.getSession();
 		session.setAttribute("loginid", userid);
 		session.setAttribute("passcode", passcode);
@@ -69,11 +79,16 @@ public class HomeController {
 		}				
 	}
 	@RequestMapping("/room")//다른웹사이트가면 세션이 초기화됨. 그 초기화되어서 null값이 될경우를 써준다.
-	public String room(HttpServletRequest hsr) {
+	public String room(HttpServletRequest hsr, Model model) {
 		session=hsr.getSession();
 		if(session.getAttribute("loginid")==null) {
 			return "redirect:/login";
 		}
+		//로그인된 상태 , 여기서 interface호출하고 결과를 room.jsp에 전달.
+		iRoom room = sqlSession.getMapper(iRoom.class);
+		ArrayList<Roominfo> roominfo = room.getRoomList();
+		System.out.println(roominfo);
+		model.addAttribute("list",roominfo);
 		return "room";
 	}
 	@RequestMapping("/logout")

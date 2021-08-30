@@ -1,3 +1,73 @@
+#### 20210830 (월) 작업
+- cookie : 하나의 개인정보, 클라이언트(웹브라우저)에 보관. 
+- ID&PW도 보관(자동로그인), 사이트방문기록 등
+
+- 쿠키와 세션의 공통점 : 개인정보
+- 보관형식 - 쿠키: 로컬화일(문자열),  세션 : 객체(변수)
+- 관리주체 쿠키 : 웹브라우저, 세션: 웹서버
+- 보관위치 쿠키 : 클라이언트 측, 세션 : 웹서버 측
+- 프로그램 쿠키 : 자바스크립트 서버프로그램  세션 : 서버프로그램
+- 수명주기 쿠키 : 최장365일(영구) 세션 : 웹사이트 벗어나면 소멸
+
+- 대형사이트들은 사용자들의 쿠키를 분석해서 표적 마케팅, 알고리즘을 만든다.
+
+- 마이바티스 사용을 위한 설정하기 appServlet에서 servlet-context에 이걸 추가한다.
+	<beans:bean name="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<beans:property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
+		<beans:property name="username" value="ora_user" />
+		<beans:property name="password" value="human123" />
+	
+- 그런데 여기서 주의할 점은 @localhost:1521:orcl에서 orcl부분을 확인하고 써야한다.
+- 어떻게 확인하냐면 왼쪽 ora_user에서 오른쪽->속성 들어가서 SID부분을 확인하고 써야한다.
+
+- sqlSession 안에 많은것이 들어있다. 
+- DataSource : 우리가 가지고 있는 DB(SQL디벨로퍼) DB의 URL, userid, password를 선언
+- Mapper : sql문들
+- Mapper는 두가지로 구성된다. 하나는 xml 또하나는 interface(.java)
+- 마이바티스는 실행되는 sql문을 프로그램코드에 넣지 않고 xml파일에 넣는다.
+- interface에는 메소드가 들어가 있다. 
+- 그래서 메퍼에는 메소드+sql문이 들어가 있다.
+- xml파일의 resultType에는 어디에 반환할지에 대한 클래스 경로,이름을 써준다.
+- xml에는 sql문을 통해 가져올 데이터타입을 쭉쭉 적어준다. 그리고 그것만으로는 부족하니까 인터페이스클래스를 하나 만들어서 호출할 준비를 만든다.
+- xml의 select id에는 인터페이스의 메소드, reslutType에는 인터페이스의 반환데이터타입
+- 메퍼의 namespace는 인터페이스의 경로명+이름을 적어준다.
+- 인터페이스는 껍데기. 중간 매개역할. 보내주는 껍데기이다.
+
+- 인터페이스와 xml파일은 긴밀한 관계이다. 서로 짝이 맞아야 xml파일 안의 sql문이 발휘된다.
+
+sql문 가져가기
+create table room (
+roomcode decimal(2) primary key, --단일컬럼, 전체테이블의 그 칼럼에서 유일한 값을 갖는다.
+name varchar2(20),
+type decimal(2),
+howmany decimal(2),
+howmuch decimal(6,0)
+);
+
+create table roomtype(
+typecode decimal(2) primary key,
+name varchar2(20)
+);
+
+insert into roomtype values(1,'SuiteRoom');
+insert into roomtype values(2,'FamilyRoom');
+insert into roomtype values(3,'DoubleRoom');
+insert into roomtype values(4,'SingleRoom');
+
+select * from roomtype;
+
+select*from room;
+insert into room values(1,'백두산',1,8,500000);
+insert into room values(2,'한라산',2,6,450000);
+insert into room values(3,'설악산',3,4,300000);
+insert into room values(4,'지리산',4,2,150000);
+
+select a.roomcode, a.name, b.name, a.howmany, a.howmuch  from room a, roomtype b
+where a.type=b.typecode;
+
+
+
 #### 20210827 (금) 작업
 - 세션(Session) : 개인정보, 웹서버에 보관, 객체(변수)
 - JSP 내장객체(Built-in Object) : 별도 선언안하고 쓸 수 있는 것
@@ -17,6 +87,10 @@
 4. 웹서버가 다운되면 소멸.
 
 - 세션 생성 : session.setAttribute("userid",loginid);
+- set했으면 get해서 꺼내올 수 있다.
+- public String booking(HttpServletRequest hsr) {
+	session=hsr.getSession();
+
 
 - HomeController에서의 Session : Session을 세팅
 1. HttpSession 변수 하나를 선언&초기화(
