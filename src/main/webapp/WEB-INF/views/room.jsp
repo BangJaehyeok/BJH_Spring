@@ -21,10 +21,11 @@
     </div>
     <div id="nav">
         <h2>객실목록</h2>
-        <select id="reserveRoom2" size="6" style="width: 250px; height: 250px; 
-        font-size: 18px; padding-top: 10px; padding-left: 10px;">
+        <select id="reserveRoom2" size="6" style="width: 350px; height: 250px; 
+        font-size: 16px; padding-top: 10px; padding-left: 5px;">
         <c:forEach items="${list}" var="room">
-	        <option>${room.roomcode},${room.name},${room.type},${room.howmany},${room.howmuch}</option>
+	        <option value="${room.roomcode}">${room.roomcode}.${room.name} Type${room.type} 
+	        		최대 ${room.howmany}명 1박요금:${room.howmuch}원</option>
         </c:forEach>
         <!-- forEach문으로 반복하여 나타낸다. -->
         </select>
@@ -32,30 +33,40 @@
     <h2>객실 정보</h2>
     <table>
         <tr>
-            <td>객실이름</td>
-            <td><input type="text" id="roomName"></td>
+            <td>객실명</td>
+            <td><input type="text" id="roomName"><input type=hidden id=roomcode></td>
         </tr>
         <tr>
             <td>객실분류</td>
-            <td><select size="2" style="width: 175px; height: 120px;"><br>
-                    <option id="room1">백두산 SuiteRoom</option>
-                    <option id="room2">한라산 FamilyRoom</option>
-                    <option id="room3">설악산 DoubleRoom</option>
-                    <option id="room4">지리산 SingleRoom</option>
-                    <option id="room5">태조산 SingleRoom</option>
+            <td><select  id="selType" size="5" style="width: 175px; height: 120px; font-size:16px;"><br>
+            <c:forEach items="${type}" var="room">
+	        	<option value='${room.typecode}'>${room.typecode}.${room.name}</option>
+        	</c:forEach>
                 </select></td>
         </tr>
         <tr>
-            <td>숙박가능인원</td>
-            <td><input type="number"></td>
+            <td>최대숙박인원</td>
+            <td><input type="number" id="txtNum"></td>
         </tr>
         <tr>
             <td>1박 요금</td>
             <td><input type="text" id="roomPrice"></td>
+        </tr>
+        <tr>
+        <td colspan=2 align=center>
+        <br>
+        	<input type=button value='등록' id="btnAdd">&nbsp;
+        	<input type=button value='삭제' id="btnDelete">&nbsp;
+        	<input type=button value='Clear' id="btnDelete">
+        </td>
         </tr>
 
     </table>
     <div id="footer">       
     </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script>
+
+</script>
 </html>
