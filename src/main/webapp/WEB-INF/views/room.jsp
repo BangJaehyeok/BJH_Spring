@@ -22,10 +22,9 @@
     <div id="nav">
         <h2>객실목록</h2>
         <select id="reserveRoom2" size="6" style="width: 350px; height: 250px; 
-        font-size: 16px; padding-top: 10px; padding-left: 5px;">
+        font-size: 15px; padding-top: 10px; padding-left: 5px;">
         <c:forEach items="${list}" var="room">
-	        <option value="${room.roomcode}">${room.roomcode}.${room.name} Type${room.type} 
-	        		최대 ${room.howmany}명 1박요금:${room.howmuch}원</option>
+	        <option id="listName" value="${room.roomcode}">${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>
         </c:forEach>
         <!-- forEach문으로 반복하여 나타낸다. -->
         </select>
@@ -38,7 +37,7 @@
         </tr>
         <tr>
             <td>객실분류</td>
-            <td><select  id="selType" size="5" style="width: 175px; height: 120px; font-size:16px;"><br>
+            <td><select  id="selType" size="5" style="width: 175px; height: 120px; font-size:15px;"><br>
             <c:forEach items="${type}" var="room">
 	        	<option value='${room.typecode}'>${room.typecode}.${room.name}</option>
         	</c:forEach>
@@ -67,6 +66,12 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script>
-
+$(document)
+.on('click','#listName',function(){
+    $('#roomName').val($("#reserveRoom2 option:selected").text().split(',')[0]); 
+    $('#txtNum').val($("#reserveRoom2 option:selected").text().split(',')[2]);
+    $('#roomPrice').val($("#reserveRoom2 option:selected").text().split(',')[3]);
+    $('#selType option:eq(0)').prop("selected", true);
+	})
 </script>
 </html>

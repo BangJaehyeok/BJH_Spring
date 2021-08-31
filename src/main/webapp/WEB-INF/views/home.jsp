@@ -4,10 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>선택</title>
+<title>Hotel Login Home</title>
 </head>
 <body>
-<h1 style="text-align: center; font-size:40px; margin-top: 5%;">HOME</h1>
+<h1 style="text-align: center; font-size:50px; margin-top: 5%;">HOTEL SYSTEM</h1>
+<h1 style="text-align: center;">LOGIN</h1>
 <div style="margin-left: auto; margin-right: auto;
  width: 400px; height: 250px; 
 border: 1px solid black; margin-top: 5%;">

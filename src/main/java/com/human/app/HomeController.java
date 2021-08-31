@@ -70,17 +70,17 @@ public class HomeController {
 		session=hsr.getSession();
 		if(session.getAttribute("loginid")==null) {
 			return "redirect:/home";
-		}
-		//로그인된 상태 , 여기서 interface호출하고 결과를 room.jsp에 전달.
+		}		
 		iRoom room = sqlSession.getMapper(iRoom.class);
 		//iRoom.class에 있는 매퍼값을 즉, sql문을 가져와 room이란 변수에 넣는다
 		ArrayList<Roominfo> roominfo = room.getRoomList();
 		//iRoom인터페이스에 있는 getRoomList()라는 ArrayList배열을 호출한다.
-		ArrayList<Roomtype> roomtype = room.getRoomType();
 		//그리고 roominfo라는 변수에 넣는다. 
-		System.out.println(roomtype);
 		model.addAttribute("list",roominfo);
-		//model 어트리뷰트를 통해 list란 이름으로 roominfo 배열변수를
+		//model 어트리뷰트를 통해 list란 이름으로 roominfo 배열변수를 room으로 보낸다.
+		
+		ArrayList<Roomtype> roomtype = room.getRoomType();
+		System.out.println(roomtype);
 		model.addAttribute("type",roomtype);
 		return "room";//room으로 보낸다.
 	}

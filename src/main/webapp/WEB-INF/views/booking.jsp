@@ -5,7 +5,7 @@
 	String loginid=(String)session.getAttribute("loginid");
 	String passcode=(String)session.getAttribute("passcode");
 	out.println(loginid);
-	if(!loginid.equals("admin")||!(passcode.equals("1234"))){		
+	if(!loginid.equals("admin")||!(passcode.equals("123"))){		
 		response.sendRedirect("http://localhost:8080/app/selected?path=login");
 	}
 %>

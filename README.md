@@ -1,6 +1,38 @@
 #### 20210831 (화) 작업
 - 회사에서는 에러를 잡아주지 않는다. 기다리지말고 스스로 에러를 잡고 해결해보자.
-- 
+- 하루종일 스프링과 SQL디벨로퍼의 DB를 연결하는 작업을 수행했다.
+- iRoom.xml에서 select, delete, insert 등의 작업을 위해 씌워주고, 그 안에 sql문을 넣는다.
+- 오늘은 select문만 해봄.
+- mapper의 namespace는 연결된 인터페이스클래스의 경로이다.
+- select구문의 id는 인터페이스의 메소드명이다. 그리고 인터페이스클래스가 반환되는 값은 resultType으로 바로 뒤에 준다.
+- 그리고 인터페이스를 구성해준다.
+- 인터페이스 안에 ArrayList<DB컬럼 변수들이 들어간 클래스명> 메소드명();
+- 그리고 DB컬럼 변수들이 들어간 클래스를 만들어준다. 
+- 클래스에서 DB컬럼명들을 다 변수정의해준다. ex) String name; int type;...
+- 다 정의한 후 오른쪽-> Source -> Generate 어쩌구 using field 클릭해서 모든 변수 선택하고 omit Super 체크하고 생성
+- 그리고 기본생성자도 만들어줘야한다. 위와 똑같이 진행한 후 모든 변수를 체크해제하고 omit Super 체크하고 생성하면 기본생성자 ex)public Roomtype() {} 이런게 만들어진다.
+- 그리고 다시 모든 변수들을 게터세터 생성해준다.
+- 위의 단계로 DB의 데이터를 받을 준비는 되었다. DB가 SQL문을 따라 프로그램으로 왔다.
+
+- 그럼 HomeController를 통해 SQL문을 받은 iRoom.xml을 호출한 후 필요한 jsp파일에 가져다 주는 명령어를 쓴다.
+- 기본적으로 HttpServletRequest hsr, Model model을 세팅한후
+- iRoom room = sqlSession.getMapper(iRoom.class);
+- 위처럼 iRoom.class에 있는 매퍼값을 즉, sql문을 가져와 room이란 변수에 넣는다.
+- ArrayList<Roominfo> roominfo = room.getRoomList();
+- 그리고 iRoom인터페이스에 있는 getRoomList()라는 ArrayList배열을 호출한다. 이것을 roominfo라는 변수에 넣는다. 
+- model.addAttribute("list",roominfo);
+- model addAttribute를 통해 list란 이름으로 roominfo 배열변수를 room으로 보낸다.
+- return "room"; 하면 완성.
+
+- 이제 jsp파일에서 HomeController에서 보낸 dB를 받아 클라이언트에게 보여줘야한다.
+- <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+- 우선 jsp파일 안에 C태그를 사용할 수 있게 미리 설정해둔다.
+- 해당 배열을 다 써내려가기 보다 C태그의 forEach문을 써서 반복적으로 나타낼 수 있게 한다.
+- <c:forEach items="${type}" var="room">
+	<option value='${room.typecode}'>${room.typecode}.${room.name}</option>
+</c:forEach>
+- 위처럼 C태그를 해주는데 items="${type}"해서 해당 model로 설정한 값을 써준다. 
+        
 
 
 #### 20210830 (월) 작업
