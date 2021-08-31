@@ -27,16 +27,7 @@ public class HomeController {
 	
 	@Autowired
 	private SqlSession sqlSession;
-	
-	@RequestMapping("/viewinfo")
-	public String doInfo(HttpServletRequest hsr, Model model) {
-		String uid=hsr.getParameter("userid");
-		String pw=hsr.getParameter("passcode");		
-		model.addAttribute("userid",uid);
-		model.addAttribute("passcode",pw);		
-		return "viewinfo";
-	}
-	
+		
 	@RequestMapping("/newinfo")
 	public String doJoin(HttpServletRequest hsr, Model model) {
 		String uid=hsr.getParameter("userid");
@@ -52,10 +43,6 @@ public class HomeController {
 		return "newinfo";
 	}
 	
-	@RequestMapping("/getinfo")
-	public String getinfo() {
-		return "getinfo";
-	}
 	@RequestMapping(value="/check_user",method=RequestMethod.POST)
 	public String check_user(HttpServletRequest hsr) {
 		String userid=hsr.getParameter("userid");
@@ -82,14 +69,18 @@ public class HomeController {
 	public String room(HttpServletRequest hsr, Model model) {
 		session=hsr.getSession();
 		if(session.getAttribute("loginid")==null) {
-			return "redirect:/login";
+			return "redirect:/home";
 		}
 		//로그인된 상태 , 여기서 interface호출하고 결과를 room.jsp에 전달.
 		iRoom room = sqlSession.getMapper(iRoom.class);
+		//iRoom.class에 있는 매퍼값을 즉, sql문을 가져와 room이란 변수에 넣는다
 		ArrayList<Roominfo> roominfo = room.getRoomList();
+		//iRoom인터페이스에 있는 getRoomList()라는 ArrayList배열을 호출한다.
+		//그리고 roominfo라는 변수에 넣는다. 
 		System.out.println(roominfo);
 		model.addAttribute("list",roominfo);
-		return "room";
+		//model 어트리뷰트를 통해 list란 이름으로 roominfo 배열변수를
+		return "room";//room으로 보낸다.
 	}
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest hsr) {

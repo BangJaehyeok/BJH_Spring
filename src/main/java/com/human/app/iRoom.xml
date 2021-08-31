@@ -2,8 +2,10 @@
 <!DOCTYPE mapper
 	PUBLIC "-//mybatisd.org//DTD Mapper 3.0//EN"
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-	
+
+<!-- namespace="인터페이스의 경로+이름' -->	
 <mapper namespace="com.human.app.iRoom">
+	<!-- id="인터페이스 메소드명" resultType="인터페이스의 반환경로" -->	
 	<select id="getRoomList" resultType="com.human.app.Roominfo">
 		select roomcode,name,type,howmany,howmuch from room order by roomcode
 	</select>

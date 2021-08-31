@@ -1,15 +1,14 @@
 /* 객실관리홈페이지 css설정 */
 
 #nav{    
-    width: 30%;
+    width: 40%;
     height: 600px;
     float: left;
-    margin-left: 50px;
+    margin-left: 100px;
 }
 #nav #roomlist{
     width: 250px;
     padding-left: 10px;
-    border: solid 1px black;
 }
 #sectionMenu{
     width:10%;
@@ -21,12 +20,12 @@
     font-size: 20px;
 }
 #section{
-    width: 30%;
+    width: 40%;
     height: 600px;
     text-align: left;
     float: left;
     padding: 10px;
-    margin-left: 10px;
+    margin-left: 30px;
     padding-top: 15px;
 }
 #footer{
@@ -53,19 +52,17 @@
 #nav2 #findRoom{
     width: 250px;
     padding-left: 10px;
-    border: solid 1px black;
 }
 #nav2 #reserveRoom{
     width: 250px;
     padding-left: 10px;
-    margin-top: 50px;
-    border: solid 1px black;
+    margin-top: 50px;    
 }
 #sectionMenu2{
     width: 30%;
     height: 700px;
     float: left;
-    
+    padding-left: 20px;
 }
 #sectionMenu2 h2{
     font-size: 20px;
