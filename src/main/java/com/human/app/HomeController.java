@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Handles requests for the application home page.
@@ -59,7 +62,7 @@ public class HomeController {
 		session=hsr.getSession();
 		String loginid=(String)session.getAttribute("loginid");
 		String passcode=(String)session.getAttribute("passcode");		
-		if(loginid.equals("admin")&&(passcode.equals("1234"))){		
+		if(loginid.equals("admin")&&(passcode.equals("123"))){		
 			return "booking";//JSP 파일 이름
 		} else {
 			return "redirect:/home";
@@ -73,10 +76,10 @@ public class HomeController {
 		}		
 		iRoom room = sqlSession.getMapper(iRoom.class);
 		//iRoom.class에 있는 매퍼값을 즉, sql문을 가져와 room이란 변수에 넣는다
-		ArrayList<Roominfo> roominfo = room.getRoomList();
-		//iRoom인터페이스에 있는 getRoomList()라는 ArrayList배열을 호출한다.
-		//그리고 roominfo라는 변수에 넣는다. 
-		model.addAttribute("list",roominfo);
+//		ArrayList<Roominfo> roominfo = room.getRoomList();
+//		//iRoom인터페이스에 있는 getRoomList()라는 ArrayList배열을 호출한다.
+//		//그리고 roominfo라는 변수에 넣는다. 
+//		model.addAttribute("list",roominfo);
 		//model 어트리뷰트를 통해 list란 이름으로 roominfo 배열변수를 room으로 보낸다.
 		
 		ArrayList<Roomtype> roomtype = room.getRoomType();
@@ -104,6 +107,25 @@ public class HomeController {
 		} else {
 			return "choose";
 		}		
+	}
+	@RequestMapping(value="/getRoomList",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String getRoomList(HttpServletRequest hsr) {
+		iRoom room = sqlSession.getMapper(iRoom.class);
+		ArrayList<Roominfo> roominfo = room.getRoomList();
+		//찾아진 데이터로 JSONArray만들기
+		JSONArray ja = new JSONArray();
+		for(int i=0;i<roominfo.size();i++) {
+			JSONObject jo = new JSONObject();
+			jo.put("roomcode", roominfo.get(i).getRoomcode());
+			jo.put("roomname", roominfo.get(i).getRoomname());
+			jo.put("typename", roominfo.get(i).getTypename());
+			jo.put("howmany", roominfo.get(i).getHowmany());
+			jo.put("howmuch", roominfo.get(i).getHowmuch());
+			ja.add(jo);
+		}
+		return ja.toString();
 	}
 	
 }

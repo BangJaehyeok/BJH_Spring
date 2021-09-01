@@ -21,11 +21,11 @@
     </div>
     <div id="nav">
         <h2>객실목록</h2>
-        <select id="reserveRoom2" size="6" style="width: 350px; height: 250px; 
+        <select id="reserveRoom2" size="6" style="width: 250px; height: 250px; 
         font-size: 15px; padding-top: 10px; padding-left: 5px;">
-        <c:forEach items="${list}" var="room">
-	        <option id="listName" value="${room.roomcode}">${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>
-        </c:forEach>
+       <%--  <c:forEach items="${list}" var="room">
+	        <option value="${room.roomcode}">${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>
+        </c:forEach> --%>
         <!-- forEach문으로 반복하여 나타낸다. -->
         </select>
     </div>
@@ -38,8 +38,8 @@
         <tr>
             <td>객실분류</td>
             <td><select  id="selType" size="5" style="width: 175px; height: 120px; font-size:15px;"><br>
-            <c:forEach items="${type}" var="room">
-	        	<option value='${room.typecode}'>${room.typecode}.${room.name}</option>
+            <c:forEach items="${type}" var="roomtype">
+	        	<option value='${roomtype.typecode}'>${roomtype.typecode}.${roomtype.name}</option>
         	</c:forEach>
                 </select></td>
         </tr>
@@ -56,7 +56,7 @@
         <br>
         	<input type=button value='등록' id="btnAdd">&nbsp;
         	<input type=button value='삭제' id="btnDelete">&nbsp;
-        	<input type=button value='Clear' id="btnDelete">
+        	<input type=button value='Clear' id="btnClear">
         </td>
         </tr>
 
@@ -67,11 +67,26 @@
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script>
 $(document)
-.on('click','#listName',function(){
-    $('#roomName').val($("#reserveRoom2 option:selected").text().split(',')[0]); 
-    $('#txtNum').val($("#reserveRoom2 option:selected").text().split(',')[2]);
-    $('#roomPrice').val($("#reserveRoom2 option:selected").text().split(',')[3]);
-    $('#selType option:eq(0)').prop("selected", true);
+.ready(function(){//ajax호출
+	$.post("http://localhost:8080/app/getRoomList",{},function(result){
+		console.log(result);
+	},'json');
+})
+.on('click','#reserveRoom2 option',function(){
+	let a=$(this).text();
+	let ar=a.split(',');
+	$('#roomName').val(ar[0]);
+	$('#selType option:contains("'+ar[1]+'")').prop('selected','selected');
+	$('#txtNum').val(ar[2]);
+	$('#roomPrice').val(ar[3]);
+	let code=$(this).val();
+	$('#roomcode').val(code);//DB호출을 위한 KEY값 저장
+	return false;
+	
 	})
+.on('click','#btnClear',function(){
+	$('#roomName,#txtNum,#roomPrice,#selType,#roomcode').val('');
+	return false;
+})
 </script>
 </html>

@@ -1,3 +1,48 @@
+#### 20210831 (수) 작업
+- jQuery로 room의 옵션 클릭하면 나타나게 하기
+- $(document)
+.on('click','#selRoom option',function(){ <-셀렉트의 옵션을 클릭하면 작동
+	let str=$(this).text(); / console.log(str);로 잘 나오는지 확인
+	let ar=str.split(','); <- 콤마(,)를 기준으로 자르는 배열을 만듬.
+	}
+- $('#roomName,#txtNum,#roomPrice,#selType,#roomcode').val('');
+- 위처럼 한번에 묶어서 처리할 수 있다.
+
+- Ajax처리하는 방법
+- $(document).ready(function(){
+	$.post("http://localhost:8080/app/getRoomList",{},function(result){
+		console.log(result);
+	},'json');
+})
+- ajax를 받을 준비를 jsp파일에서 설정해놓는다. script에서 위와같이 코딩을 한다.
+- post는 데이터를 받을 때 post형식으로 받는다는 것이다. getRoomList라고 주소를 정해놓는다. {}는 빈값이고, json이라고 마지막에 써서 json데이터를 받는다고 한다.
+
+- 그리고 홈컨트롤러에서 RequestMapping을 만든다.
+- @RequestMapping(value="/getRoomList",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String getRoomList(HttpServletRequest hsr) {
+		iRoom room = sqlSession.getMapper(iRoom.class);
+		ArrayList<Roominfo> roominfo = room.getRoomList();
+		
+- value를 jsp파일에 지정해둔 경로로 하고, POST방식으로 받기때문에 method를 지정해준다.
+- produces는 한글이 깨지는것을 방지하기위한 유니코드설정이다.
+- @ResponseBody는 Controller에서 JSP로 JSON데이터 전달하는 역할을 해준다.
+- JAVA에서는 JSON이라는 데이터 타입이 없기 때문에 프론트단에서 자바에게 JSON타입의 데이터를 전달해주거나 혹은 반대로 JAVA의 객체데이터를 JSON형태로 프론트단에 전달해야 하는 경우 각각 @RequestBody와 @ResponseBody가 그 역할을 해주고 있다.
+
+- JSONArray ja = new JSONArray();
+		for(int i=0;i<roominfo.size();i++) {
+			JSONObject jo = new JSONObject();
+			jo.put("roomcode", roominfo.get(i).getRoomcode());
+			jo.put("roomname", roominfo.get(i).getRoomname());
+			jo.put("typename", roominfo.get(i).getTypename());
+			jo.put("howmany", roominfo.get(i).getHowmany());
+			jo.put("howmuch", roominfo.get(i).getHowmuch());
+			ja.add(jo);
+		}
+		return ja.toString();
+- ja라는 JSONArray변수 그릇을 만든다. 
+
 #### 20210831 (화) 작업
 - 회사에서는 에러를 잡아주지 않는다. 기다리지말고 스스로 에러를 잡고 해결해보자.
 - 하루종일 스프링과 SQL디벨로퍼의 DB를 연결하는 작업을 수행했다.

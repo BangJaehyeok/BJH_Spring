@@ -4,7 +4,6 @@
 <%
 	String loginid=(String)session.getAttribute("loginid");
 	String passcode=(String)session.getAttribute("passcode");
-	out.println(loginid);
 	if(!loginid.equals("admin")||!(passcode.equals("123"))){		
 		response.sendRedirect("http://localhost:8080/app/selected?path=login");
 	}
@@ -75,14 +74,14 @@
     </div>
     <div id="section2">
         <h2 style="font-size: 22px;">예약된 객실</h2>
-        <div id="comroom" style="width: 100%; height: 600px; text-align: left;float: left;    
-        margin-left: 0px; border: 1px black solid;">
+        <select id="comroom" size="6" style="width: 300px; height: 600px; text-align: left;float: left;    
+        margin-left: 0px; border: 1px black solid;">        
+        </select>
     </div>    
 </body>
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script>
 $(document)
-
 .on('dblclick','#room1',function(){
     $('#roomname').val('백두산');    
     $('#roomPrice').val('500,000');       
@@ -110,9 +109,9 @@ $(document)
 })
 .on('click','#btnRegister2',function(){
     if($('#roomname').val()!=""){
-         $('#comroom').append($('#roomname').val()+' '+$('#roompeople').val()+'명'+'<br>'
-        +'숙박기간 : '+$('#date3').val()+'~'+$('#date4').val()+'<br>'+' 전화번호 : '+$('#telNum').val()
-        +'<br>')        
+         $('#comroom').append('<option>'+$('#roomname').val()+' '+$('#roompeople').val()+'명 '
+        +'기간 : '+$('#date3').val()+'~'+$('#date4').val()+' 전화번호 : '+$('#telNum').val()
+        +'</option>')        
     }
     $('#roomname').val('');
     $('#date3').val('');
@@ -121,6 +120,7 @@ $(document)
     $('#roomPrice').val('');  
     $('#telNum').val('');  
 })
+
 </script>
 
 </html>
