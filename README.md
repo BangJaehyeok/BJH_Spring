@@ -1,4 +1,109 @@
-#### 20210831 (수) 작업
+#### 20210902 (목) 작업
+$(document)
+.ready(function(){//ajax호출
+	$.post("http://localhost:8080/app/getRoomList",{},function(result){
+		$.each(result,function(ndx,value){
+			str='<option value="'+value['roomcode']+'">'+value['roomname']+','+value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
+			$('#reserveRoom2').append(str);});
+	},'json');})
+- C태그 대신 제이쿼리에 이렇게 설정해주면 목록이 뜬다.
+- 만약 C태그의 forEach문도 있고 제이쿼리도 ajax호출문이 있다면? 데이터가 두번뜬다.
+- 제이쿼리를 통해 클라이언트가 서버에서 가져와 목록을 채운다.
+- model Attribute를 통해 보낸건 C태그를 통해 호출한다.
+
+- DB백업 만들기
+- Sql디벨로퍼 들어가서 create table room1 as select * from room; 이렇게 room1을 만든다.
+- create는 commit해줄 필요없다. insert, update, delete등만 commit이 필요.
+
+- **delete하는 작업
+$.post('http://localhost:8080/app/deleteRoom',{roomcode:$('#roomcode').val()}),
+			function(result){
+		console.log(result);
+	},'text');
+- 우선 jsp파일에 작업해준다. post형식으로 보내고, deleteRoom이라는 임의의 이름지어주고, text형식으로 받는다.
+
+- {roomcode:$('#roomcode').val()} {}는 객체라는 뜻. #roomcode.val()의 roomcode가 서버로 post형식으로 날아감.
+
+- iRoom.java에 밑의 한줄을 추가한다. 
+void doDeleteRoom(int roomcode);
+- void를 쓴 이유는 delete는 반환값이 필요없기 때문이고 roomcode는 DB에서 number형식이라 int라고 써준다. 
+
+- 그리고 xml파일에 
+- <delete id="doDeleteRoom">
+		delete from room where roomcode=#{param1}
+	</delete>
+ 이렇게 delete를 추가해준다. 만약 인터페이스에서 int roomcode말고 다른 것도 있었다면 
+ #{param2}이렇게 추가해준다.
+
+@RequestMapping(value="/deleteRoom",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String deleteRoom(HttpServletRequest hsr) {
+		int roomcode = Integer.parseInt(hsr.getParameter("roomcode"));
+		iRoom room = sqlSession.getMapper(iRoom.class);
+		room.doDeleteRoom(roomcode);
+		return "ok"; //그냥 ok라는 텍스트를 보냄. json데이터를 보내지않음.
+- 홈컨트롤러에서 deleteRoom이라는 RequestMapping을 만들어 서버에서 클라이언트에 보내줄 준비를 해준다. 
+- hsr.파라미터("roomcode")는 문자열로 받았기 때문에 parseInt로 정수형데이터로 바꿔준다. 그리고 int roomcode 변수에 저장한다.
+- 그리고 매퍼로 받은 sql room변수에 room.doDeleteRoom(roomcode)해서 정수형데이터로 바꾼 roomcode를 클라이언트에게 보낸다.
+
+- **insert를 해보자.
+- roomcode는 부여되지 않은 상태(roomcode=="")
+- 객실명, 타입, 최대숙박인원, 1박요금 -> 데이터 to 서버
+- .on('click','#btnAdd',function(){
+	let roomname=$('#roomName').val();
+	let roomtype=$('#selType').val();
+	let howmany=$('#txtNum').val();
+	let howmuch=$('#roomPrice').val();
+	//validation(유효성 검사)
+	if(roomname==''||roomtype==''||howmany==''||howmuch==''){
+		alert("누락된 값이 있습니다.");
+		return false;
+	}
+	$.post('http://localhost:8080/app/addRoom',{roomname:roomname,roomtype:roomtype,howmany:howmany,howmuch:howmuch},
+	  function(result){
+		  if(result=='ok'){
+			  location.reload();
+		  } },'text')})
+- 밑의 script에서 추가버튼을 누를시 생기는 action을 지정해준다.
+- 우선 방이름,타입,인원수,방가격을 각각 변수지정해주고, 유효성검사는 빈값이 들어오면 패스하는것, post방식으로 받아들이는 것을 써주고, addRoom이라고 임의로 받을 주소를 만들어주고, delete에서 한것처럼 post로 날아갈 데이터의 객체를 지정해준다.
+그리고 if에서 ok라는 것이 서버에서 오면 location.reload()를 하게 해준다.
+- 홈컨트롤러에서 JSON데이터가 아닌 text값을 리턴해주기 때문에 text로 받는다고 명시한다.
+
+iRoom.xml에 insert문을 추가해준다.
+<insert id="doAddRoom">
+	insert into room(roomcode,name,type,howmany,howmuch) 
+	values(seq_room.nextval,#{param1},#{param2},#{param3},#{param4})
+</insert>
+- 이것도 delete할때처럼 반환값이 없고 id만 지정해준다. id는 당연히 인터페이스의 메소드이다.
+- 그리고 values를 지정할 때, seq_room.nextval해주고, 나머지는 delete처럼 하면된다.
+
+- void doAddRoom(String roomname,String roomtype,int howmany,int howmuch);
+- 인터페이스에도 반환값이 없어서 void로 시작한다. 그리고 doAddRoom메소드에 sql문에 들어갈 변수들을 넣어준다.
+
+@RequestMapping(value="/addRoom",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String addRoom(HttpServletRequest hsr) {
+		String rname = hsr.getParameter("roomname");
+		String rtype = hsr.getParameter("roomtype");
+		int howmany = Integer.parseInt(hsr.getParameter("howmany"));
+		int howmuch = Integer.parseInt(hsr.getParameter("howmuch"));
+		iRoom room = sqlSession.getMapper(iRoom.class);
+		room.doAddRoom(rname, rtype, howmany, howmuch);
+		return "ok";
+	}
+- 마지막으로 홈컨트롤러에 서버의 데이터를 클라이언트에게 전해줄 RequestMapping을 만들어준다.
+- value엔 addRoom으로 해서 jsp에서 임의로 정한 주소를 써준다. post방식으로 전달한다는 것도 명시해준다. 그리고 delete때처럼 변수들을 각각 지정해준다. DB의 desc를 통해 각각의 데이터 타입을 따라서 변수지정을 해준다.
+- 그리고 매퍼sql문을 소환해주고, room변수에 넣어준다. 그리고 인터페이스메소드 지정한것처럼 room.doAddRoom으로 변수지정한 4개의 변수를 넣어준다. return값 넣어주면 ok.
+
+- insert와 update의 결정적 차이는 primary key가 update는 꼭 필요하다.
+- insert는 hidden처리된 roomcode가 필요하지않고, 입력시에는 비어있는 상태이다. 그래서 그것을 insert로 인식하는 것이다.
+- 그러나 update(수정)할때는 해당 목록에서 객실을 선택한 후 수정하기 때문에 hidden처리된 roomcode는 남아있다. 그래서 roomcode를 지정한 채로 바꾼다면 그것이 수정이되는 것이다.
+- hidden된 roomcode가 없다면, insert하는 상황, 만약 있다면 update하는 상황.
+
+
+#### 20210901 (수) 작업
 - jQuery로 room의 옵션 클릭하면 나타나게 하기
 - $(document)
 .on('click','#selRoom option',function(){ <-셀렉트의 옵션을 클릭하면 작동
@@ -15,7 +120,7 @@
 	},'json');
 })
 - ajax를 받을 준비를 jsp파일에서 설정해놓는다. script에서 위와같이 코딩을 한다.
-- post는 데이터를 받을 때 post형식으로 받는다는 것이다. getRoomList라고 주소를 정해놓는다. {}는 빈값이고, json이라고 마지막에 써서 json데이터를 받는다고 한다.
+- post는 데이터를 받을 때 post형식으로 받는다는 것이다. getRoomList라고 주소를 정해놓는다. {}는 빈값이고 아무런값도 아니라는 뜻, json이라고 마지막에 써서 json데이터를 받는다고 한다.
 
 - 그리고 홈컨트롤러에서 RequestMapping을 만든다.
 - @RequestMapping(value="/getRoomList",method=RequestMethod.POST,

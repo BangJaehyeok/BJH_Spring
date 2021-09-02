@@ -77,8 +77,8 @@ public class HomeController {
 		iRoom room = sqlSession.getMapper(iRoom.class);
 		//iRoom.class에 있는 매퍼값을 즉, sql문을 가져와 room이란 변수에 넣는다
 //		ArrayList<Roominfo> roominfo = room.getRoomList();
-//		//iRoom인터페이스에 있는 getRoomList()라는 ArrayList배열을 호출한다.
-//		//그리고 roominfo라는 변수에 넣는다. 
+////		//iRoom인터페이스에 있는 getRoomList()라는 ArrayList배열을 호출한다.
+////		//그리고 roominfo라는 변수에 넣는다. 
 //		model.addAttribute("list",roominfo);
 		//model 어트리뷰트를 통해 list란 이름으로 roominfo 배열변수를 room으로 보낸다.
 		
@@ -126,6 +126,43 @@ public class HomeController {
 			ja.add(jo);
 		}
 		return ja.toString();
+	}
+	
+	@RequestMapping(value="/deleteRoom",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String deleteRoom(HttpServletRequest hsr) {
+		int roomcode = Integer.parseInt(hsr.getParameter("roomcode"));
+		iRoom room = sqlSession.getMapper(iRoom.class);
+		room.doDeleteRoom(roomcode);
+		return "ok"; //그냥 ok라는 텍스트를 보냄. json데이터를 보내지않음.
+	}
+	
+	@RequestMapping(value="/addRoom",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String addRoom(HttpServletRequest hsr) {
+		String rname = hsr.getParameter("roomname");
+		int rtype= Integer.parseInt(hsr.getParameter("roomtype"));
+		int howmany = Integer.parseInt(hsr.getParameter("howmany"));
+		int howmuch = Integer.parseInt(hsr.getParameter("howmuch"));
+		iRoom room = sqlSession.getMapper(iRoom.class);
+		room.doAddRoom(rname, rtype, howmany, howmuch);
+		return "ok";
+	}
+	
+	@RequestMapping(value="/updateRoom",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String updateRoom(HttpServletRequest hsr) {
+		iRoom room = sqlSession.getMapper(iRoom.class);
+		int rcode = Integer.parseInt(hsr.getParameter("roomcode"));
+		String rname = hsr.getParameter("roomname");
+		int rtype= Integer.parseInt(hsr.getParameter("roomtype"));
+		int howmany = Integer.parseInt(hsr.getParameter("howmany"));
+		int howmuch = Integer.parseInt(hsr.getParameter("howmuch"));		
+		room.doUpdateRoom(rcode, rname, rtype, howmany, howmuch);
+		return "ok";
 	}
 	
 }

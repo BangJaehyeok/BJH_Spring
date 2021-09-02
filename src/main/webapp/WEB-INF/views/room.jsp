@@ -33,7 +33,8 @@
     <table>
         <tr>
             <td>객실명</td>
-            <td><input type="text" id="roomName"><input type=hidden id=roomcode></td>
+            <td><input type="text" id="roomName">
+            <input type=hidden id="roomcode"></td>
         </tr>
         <tr>
             <td>객실분류</td>
@@ -54,7 +55,7 @@
         <tr>
         <td colspan=2 align=center>
         <br>
-        	<input type=button value='등록' id="btnAdd">&nbsp;
+        	<input type=button value='등록/수정' id="btnAdd">&nbsp;
         	<input type=button value='삭제' id="btnDelete">&nbsp;
         	<input type=button value='Clear' id="btnClear">
         </td>
@@ -70,6 +71,11 @@ $(document)
 .ready(function(){//ajax호출
 	$.post("http://localhost:8080/app/getRoomList",{},function(result){
 		console.log(result);
+		$.each(result,function(ndx,value){
+			str='<option value="'+value['roomcode']+'">'+value['roomname']+','+
+			value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
+			$('#reserveRoom2').append(str);
+		});
 	},'json');
 })
 .on('click','#reserveRoom2 option',function(){
@@ -80,13 +86,56 @@ $(document)
 	$('#txtNum').val(ar[2]);
 	$('#roomPrice').val(ar[3]);
 	let code=$(this).val();
-	$('#roomcode').val(code);//DB호출을 위한 KEY값 저장
+	$('#roomcode').val(code);//DB호출을 위한 KEY값 저장, 나중에 삭제할때 써먹으려고 씀.
 	return false;
 	
 	})
 .on('click','#btnClear',function(){
 	$('#roomName,#txtNum,#roomPrice,#selType,#roomcode').val('');
 	return false;
+})
+.on('click','#btnDelete',function(){
+	$.post('http://localhost:8080/app/deleteRoom',
+			{roomcode:$('#roomcode').val()},
+			function(result){
+		if(result=="ok"){
+			$('#btnClear').trigger('click');//Clear버튼 클릭 작동.
+			$('#reserveRoom2 option:selected').remove(); //roomlist에서 제거
+		}
+	},'text');
+})
+.on('click','#btnAdd',function(){
+	let roomcode=$('#roomcode').val();
+	let roomname=$('#roomName').val();
+	let roomtype=$('#selType').val();
+	let howmany=$('#txtNum').val();
+	let howmuch=$('#roomPrice').val();	
+	//validation(유효성 검사)
+	if(roomname==''||roomtype==''||howmany==''||howmuch==''){
+		alert("누락된 값이 있습니다.");
+		return false;
+	}
+	if($('#roomcode').val()==''){//insert
+		$.post('http://localhost:8080/app/addRoom',
+	  {roomname:roomname,roomtype:roomtype,howmany:howmany,howmuch:howmuch},
+	  function(result){
+		  if(result=='ok'){
+			  console.log(result);
+			  location.reload();
+		  }
+	  },'text');
+	} else {//update
+		$.post('http://localhost:8080/app/updateRoom',
+		{roomcode:roomcode,roomname:roomname,roomtype:roomtype,
+			howmany:howmany,howmuch:howmuch},
+		function(result){
+			if(result=='ok'){
+				console.log(result);
+				location.reload();
+			}
+		}, 'text');
+	}
+	
 })
 </script>
 </html>
