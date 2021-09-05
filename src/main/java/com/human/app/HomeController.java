@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,19 +32,15 @@ public class HomeController {
 	@Autowired
 	private SqlSession sqlSession;
 		
-	@RequestMapping("/newinfo")
+	@RequestMapping(value="/join",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
 	public String doJoin(HttpServletRequest hsr, Model model) {
-		String uid=hsr.getParameter("userid");
-		String pw=hsr.getParameter("passcode");	
-		String name=hsr.getParameter("realname");
-		String mobile=hsr.getParameter("mobile");
-		String address=hsr.getParameter("address");
-		model.addAttribute("userid",uid);
-		model.addAttribute("passcode",pw);
-		model.addAttribute("realname",name);
-		model.addAttribute("mobile",mobile);
-		model.addAttribute("address",address);
-		return "newinfo";
+		String realname=hsr.getParameter("realname");
+		String loginid=hsr.getParameter("loginid");
+		String passcode=hsr.getParameter("passcode1");
+		iMember member=sqlSession.getMapper(iMember.class);
+		member.doJoin(realname, loginid, passcode);
+		return "home";
 	}
 	
 	@RequestMapping(value="/check_user",method=RequestMethod.POST)
@@ -51,21 +48,25 @@ public class HomeController {
 		String userid=hsr.getParameter("userid");
 		String passcode=hsr.getParameter("passcode");
 		//DB에서 유저 확인 : 기존 유저면 booking으로, 없으면 home으로
-		session=hsr.getSession();
+		iMember member=sqlSession.getMapper(iMember.class);
+		int n=member.doCheckUser(userid,passcode);
+		if(n>0) {
+			session=hsr.getSession();
 		session.setAttribute("loginid", userid);
-		session.setAttribute("passcode", passcode);
 		return "redirect:/booking";	//RequestMapping의 경로 이름	
+		} else {
+			return "home";
+		}
 	}
 	
 	@RequestMapping(value="/booking",method=RequestMethod.GET)
 	public String booking(HttpServletRequest hsr) {
 		session=hsr.getSession();
-		String loginid=(String)session.getAttribute("loginid");
-		String passcode=(String)session.getAttribute("passcode");		
-		if(loginid.equals("admin")&&(passcode.equals("123"))){		
-			return "booking";//JSP 파일 이름
+		String loginid=(String)session.getAttribute("loginid");	
+		if(loginid==null){		
+			return "redirect:/home";//JSP 파일 이름
 		} else {
-			return "redirect:/home";
+			return "booking";
 		}				
 	}
 	@RequestMapping("/room")//다른웹사이트가면 세션이 초기화됨. 그 초기화되어서 null값이 될경우를 써준다.

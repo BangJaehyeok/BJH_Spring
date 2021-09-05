@@ -12,7 +12,7 @@
  width: 400px; height: 250px; 
 border: 1px solid black; margin-top: 5%;">
 <p style="text-align: center; font-size:larger; font-weight:1000; padding-top: 20px;">관리자 로그인</p>
-	<form method=post action="/app/check_user">	
+	<form method=post action="/app/check_user" id="frmLogin">	
 	<table cellpadding="5" cellspacing="0" style="margin-left: auto; margin-right: auto;">
 		<tr>
 			<td>ID :</td>
@@ -29,4 +29,22 @@ border: 1px solid black; margin-top: 5%;">
 </form>
 </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script>
+$(document)
+.on('submit','#frmLogin',function(){
+	let pstr=$.trim($('input[name=userid]').val());
+	$('input[name=userid]').val(pstr);
+	pstr=$.trim($('input[name=passcode]').val());
+	$('input[name=passcode]').val(pstr);
+	if($('input[name=userid]').val()==''){
+		alert('로그인 아이디를 입력하세요.');
+		return false;
+	}
+	if($('input[name=passcode]').val()=''){
+		alert('비밀번호를 입력하시오.');
+		return false;
+	}
+}
+</script>
 </html>
