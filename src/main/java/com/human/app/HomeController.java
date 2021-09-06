@@ -97,15 +97,14 @@ public class HomeController {
 	@RequestMapping(value="/addBookRoom",method=RequestMethod.POST,
 			produces = "application/text; charset=UTF-8")
 	@ResponseBody
-	public String addBookRoom(HttpServletRequest hsr) {
-		int roomcode = Integer.parseInt(hsr.getParameter("roomcode"));		
+	public String addBookRoom(HttpServletRequest hsr) {	
 		int rpriceall = Integer.parseInt(hsr.getParameter("roompriceall"));
 		int bpeople = Integer.parseInt(hsr.getParameter("bookpeople"));		
 		String bookdate = hsr.getParameter("bookdate");
 		String bname = hsr.getParameter("bookName");
 		String mobile = hsr.getParameter("mobile");		
 		iBook book = sqlSession.getMapper(iBook.class);
-		book.doAddBook(roomcode, rpriceall, bpeople, bookdate, bname, mobile);
+		book.doAddBook(rpriceall, bpeople, bookdate, bname, mobile);
 		return "ok";
 	}
 	

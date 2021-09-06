@@ -97,7 +97,7 @@
     </div>
     <div id="section2">
         <h2 style="font-size: 22px;">예약된 객실</h2>
-        <select id="comroom" size="6" style="width: 400px; height: 600px; text-align: left;float: left;    
+        <select id="comroom" size="6" style="width: 500px; height: 600px; text-align: left;float: left;    
         margin-left: 0px; border: 1px black solid;">        
         </select>
     </div>    
@@ -123,6 +123,8 @@ $(document)
 	$('#roomname').val(ar[0]);
 	$('#roomtypelist option:contains("'+ar[1]+'")').prop('selected','selected');
 	$('#roompeople').val(ar[2]);
+	$('#date3').val($('#date1').val());
+	$('#date4').val($('#date2').val());
 	let code=$(this).val();
 	$('#roomcode').val(code);//DB호출을 위한 KEY값 저장, 나중에 삭제할때 써먹으려고 씀.	
 	return false;
@@ -143,7 +145,7 @@ $(document)
 	}
 })
 .on('click','#btnClear2',function(){
-	$('#roomname,#roomtypelist,#roompeople,#date3,#date4,#bookpeople,#roompriceall,#telNum,#bookName').val('');
+	$('#roomname,#roomtypelist,#roompeople,#date1,#date2,#date3,#date4,#bookpeople,#roompriceall,#telNum,#bookName').val('');
 	return false;
 })
 
@@ -153,12 +155,13 @@ $(document)
 	let bookdate2=$('#date4').val();
 	let bookdate=String(bookdate1)+'~'+String(bookdate2);
 	let roomname=$('#roomname').val();
-	let roomtypelist=$('#roomtypelist').val();
+	let roomtypelist=$('#roomtypelist option:selected').text();
 	let roompeople=$('#roompeople').val();
 	let roompriceall=$('#roompriceall').val();
 	let bookpeople=$('#bookpeople').val();
 	let bookName=$('#bookName').val();
 	let mobile=$('#telNum').val();
+	console.log(roomcode);
 	
 	if(roomname==''||roomtypelist==''||roompeople==''||roompriceall==''||bookpeople==''||bookName==''||mobile==''){
 		alert("누락된 값이 있습니다.");
@@ -168,15 +171,15 @@ $(document)
 		alert("예약인원이 최대인원을 초과했습니다.");
 		return false;
 	}
-	if($('#roomname').val()!=''){//insert
+	if($('#roomcode').val()!=''){//insert
 		$.post('http://localhost:8080/app/addBookRoom',
 	  {roompriceall:roompriceall,bookpeople:bookpeople,bookdate:bookdate,bookName:bookName,mobile:mobile},
 	  function(result){
 		  if(result=='ok'){
-			  str='<option>'+roomname+' '+roomtypelist+' '+bookName+' '+mobile+' '+bookpeople+'/'+roompeople+' '+bookdate+' '+roompriceall+'</option>'
+			  str='<option>'+roomname+' '+roomtypelist+' '+'예약자명:'+bookName+' '+'전화번호:'+mobile+' '+bookpeople+'명'+'/'+roompeople+'명'+' '+bookdate+' '+roompriceall+'원'+'</option>'
 			  console.log(str);
 			  $('#comroom').append(str);
-			  $('#roomname,#roomtypelist,#roompeople,#date3,#date4,#bookpeople,#roomPrice,#telNum,#bookName').val('');
+			  $('#roomname,#roomtypelist,#roompriceall,#roompeople,#date1,#date2,#date3,#date4,#bookpeople,#roomPrice,#telNum,#bookName').val('');
 		  return false;
 			}
 		},'text');

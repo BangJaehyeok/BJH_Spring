@@ -39,15 +39,23 @@
     height: 180px; 
     text-align: center;
     padding: 30px;
-    color: white;
-    background-color: teal;
+    background-color: cadetblue;
+    color: oldlace;    
 }
-#nav2{    
-    width: 30%;
+#section{
+    width: 20%;
     height: 700px;
     float: left;
-    margin-left: 50px;
-    margin-top: 10px;
+    border: black 1px solid;
+    background-color: white;
+}
+#nav2{    
+    width: 300px;
+    height: 600px;
+    float: left;
+    margin-left: 20px;
+    margin-top: 64px;
+        
 }
 #nav2 #findRoom{
     width: 250px;
@@ -56,26 +64,29 @@
 #nav2 #reserveRoom{
     width: 250px;
     padding-left: 10px;
-    margin-top: 50px;    
+    margin-top: 50px;
+    
 }
 #sectionMenu2{
-    width: 30%;
-    height: 600px;
+    width: 31%;
+    height: 700px;
     float: left;
-    padding-left: 20px;
-    border: 1px solid black;
-    margin-top: 63px;
+    background-color: white;
+    
 }
 #sectionMenu2 h2{
-    font-size: 14px;
+    font-size: 20px;
 }
 #section2{
-    width: 30%;
-    height: 600px;
+    width: 31%;
+    height: 700px;
     text-align: left;
-    float: left; 
-    margin-left:20px;
+    float: left;    
+    margin-left: 10px;
+    
+    
 }
+
 #footer2{
    
     height: 100px;
