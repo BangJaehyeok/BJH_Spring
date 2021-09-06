@@ -7,7 +7,7 @@
 <mapper namespace="com.human.app.iMember">
 	<insert id="doJoin">
 		insert into member(name,loginid,passcode) 
-		values(#{param1, jdbcType=VARCHAR},#{param2, jdbcType=VARCHAR},#{param3, jdbcType=VARCHAR})
+		values(#{param1},#{param2},#{param3})
 	</insert>
 	<select id="doCheckUser" resultType="int">
 		select count(*) from member where loginid=#{param1} and passcode=#{param2}

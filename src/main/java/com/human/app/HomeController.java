@@ -1,5 +1,6 @@
 package com.human.app;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,15 +61,64 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/booking",method=RequestMethod.GET)
-	public String booking(HttpServletRequest hsr) {
+	public String booking(HttpServletRequest hsr,Model model) {
 		session=hsr.getSession();
 		String loginid=(String)session.getAttribute("loginid");	
 		if(loginid==null){		
 			return "redirect:/home";//JSP 파일 이름
 		} else {
+			iRoom room = sqlSession.getMapper(iRoom.class);
+			ArrayList<Roomtype> roomtype = room.getRoomType();
+			model.addAttribute("type",roomtype);
 			return "booking";
-		}				
+		}
 	}
+	
+	@RequestMapping(value="/getBookRoomList",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String getBookRoomList(HttpServletRequest hsr) {
+		iRoom room = sqlSession.getMapper(iRoom.class);
+		ArrayList<Roominfo> roominfo = room.getRoomList();
+		//찾아진 데이터로 JSONArray만들기
+		JSONArray ja = new JSONArray();
+		for(int i=0;i<roominfo.size();i++) {
+			JSONObject jo = new JSONObject();
+			jo.put("roomcode", roominfo.get(i).getRoomcode());
+			jo.put("roomname", roominfo.get(i).getRoomname());
+			jo.put("typename", roominfo.get(i).getTypename());
+			jo.put("howmany", roominfo.get(i).getHowmany());
+			jo.put("howmuch", roominfo.get(i).getHowmuch());
+			ja.add(jo);
+		}
+		return ja.toString();
+	}
+	
+	@RequestMapping(value="/addBookRoom",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String addBookRoom(HttpServletRequest hsr) {
+		int roomcode = Integer.parseInt(hsr.getParameter("roomcode"));		
+		int rpriceall = Integer.parseInt(hsr.getParameter("roompriceall"));
+		int bpeople = Integer.parseInt(hsr.getParameter("bookpeople"));		
+		String bookdate = hsr.getParameter("bookdate");
+		String bname = hsr.getParameter("bookName");
+		String mobile = hsr.getParameter("mobile");		
+		iBook book = sqlSession.getMapper(iBook.class);
+		book.doAddBook(roomcode, rpriceall, bpeople, bookdate, bname, mobile);
+		return "ok";
+	}
+	
+	@RequestMapping(value="/deleteBookRoom",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String dodeleteBook(HttpServletRequest hsr) {
+		String rname = hsr.getParameter("roomname");
+		iBook book = sqlSession.getMapper(iBook.class);
+		book.doDeleteBook(rname);
+		return "ok"; //그냥 ok라는 텍스트를 보냄. json데이터를 보내지않음.
+	}
+	
 	@RequestMapping("/room")//다른웹사이트가면 세션이 초기화됨. 그 초기화되어서 null값이 될경우를 써준다.
 	public String room(HttpServletRequest hsr, Model model) {
 		session=hsr.getSession();

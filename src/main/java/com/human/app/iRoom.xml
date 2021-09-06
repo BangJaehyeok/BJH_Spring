@@ -8,7 +8,7 @@
 	<!-- id="인터페이스 메소드명" resultType="인터페이스의 반환경로" -->	
 	<select id="getRoomList" resultType="com.human.app.Roominfo">
 		select a.roomcode, a.name roomname, b.name typename, a.howmany, a.howmuch  from room a, roomtype b
-		where a.type=b.typecode order by roomcode
+		where a.type=b.typecode order by howmuch
 	</select>
 	<select id="getRoomType" resultType="com.human.app.Roomtype">
 		select typecode, name from roomtype order by typecode
@@ -24,4 +24,5 @@
 		update room set name=#{param2},type=#{param3},howmany=#{param4},howmuch=#{param5}
 		where roomcode=#{param1}
 	</update>
+	
 </mapper>
