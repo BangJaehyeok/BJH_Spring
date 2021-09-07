@@ -6,10 +6,9 @@
 <!-- namespace="인터페이스의 경로+이름' -->	
 <mapper namespace="com.human.app.iBook">
 	<insert id="doAddBook">
-		insert into booking(roomcode,roompriceall,bookingpeople,bookingdate,bookingname,mobile) 
-		values(seq_book.nextval,#{param1},#{param2},#{param3},#{param4},#{param5})
+		insert into booking values(seq_book.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6})
 	</insert>
 	<delete id="doDeleteBook">
-		delete from booking where roomname=#{param1}
+		delete from booking where roomcode=#{param1}
 	</delete>
 </mapper>

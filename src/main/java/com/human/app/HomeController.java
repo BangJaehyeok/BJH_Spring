@@ -97,14 +97,15 @@ public class HomeController {
 	@RequestMapping(value="/addBookRoom",method=RequestMethod.POST,
 			produces = "application/text; charset=UTF-8")
 	@ResponseBody
-	public String addBookRoom(HttpServletRequest hsr) {	
+	public String addBookRoom(HttpServletRequest hsr) {
+		int rcode = Integer.parseInt(hsr.getParameter("roomcode"));
 		int rpriceall = Integer.parseInt(hsr.getParameter("roompriceall"));
 		int bpeople = Integer.parseInt(hsr.getParameter("bookpeople"));		
 		String bookdate = hsr.getParameter("bookdate");
 		String bname = hsr.getParameter("bookName");
 		String mobile = hsr.getParameter("mobile");		
 		iBook book = sqlSession.getMapper(iBook.class);
-		book.doAddBook(rpriceall, bpeople, bookdate, bname, mobile);
+		book.doAddBook(rcode,rpriceall, bpeople, bookdate, bname, mobile);
 		return "ok";
 	}
 	
@@ -112,9 +113,9 @@ public class HomeController {
 			produces = "application/text; charset=UTF-8")
 	@ResponseBody
 	public String dodeleteBook(HttpServletRequest hsr) {
-		String rname = hsr.getParameter("roomname");
+		int roocode = Integer.parseInt(hsr.getParameter("roomcode"));
 		iBook book = sqlSession.getMapper(iBook.class);
-		book.doDeleteBook(rname);
+		book.doDeleteBook(roocode);
 		return "ok"; //그냥 ok라는 텍스트를 보냄. json데이터를 보내지않음.
 	}
 	

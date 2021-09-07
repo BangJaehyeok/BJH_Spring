@@ -49,7 +49,7 @@
         </div>
     </div>
     <div id="sectionMenu2" style="border: 1px solid black; margin-top: 63px; height:600px;">
-    <table cellpadding="5" cellspacing="0" style="margin-left: auto; margin-right: auto;">
+    <table cellpadding="5" cellspacing="0" style="margin-left: auto; margin-right: auto; padding-left:15px; padding-top:15px">
     	<tr>
     		<td style="width:100px;">객실이름</td>
     		<td><input type="text" id="roomname">
@@ -66,7 +66,7 @@
     	</tr>    	
     	<tr>
     		<td>예약인원</td>
-    		<td><input type="number" id="bookpeople"></td>
+    		<td><input type="number" id="bookpeople" min=1></td>
     	</tr>
     	<tr>
     		<td>최대인원</td>
@@ -90,10 +90,11 @@
     		<td><input type="text" id="telNum"></td>
     	</tr>
     </table>
-        <br><br>
-        <input type="button" id="btnRegister2" value="  예약완료  ">
+        <br>
+        <p style="text-align:center;"><input type="button" id="btnRegister2" value="  예약완료  ">
         <input type="button" id="btnClear2" value="  비우기  ">
-        <input type="button" id="btnDelete2" style="height: 24px;"  value="  예약취소  ">
+        <input type="button" id="btnDelete2" value="  예약취소  ">
+    	</p>
     </div>
     <div id="section2">
         <h2 style="font-size: 22px;">예약된 객실</h2>
@@ -106,8 +107,17 @@
 <script>
 $(document)
 .on('click','#btnroomlist',function(){//ajax호출
-	$.post("http://localhost:8080/app/getBookRoomList",{},function(result){
+	let bookdate1=$('#date1').val();
+	let bookdate2=$('#date2').val();
+	if(bookdate1==''||bookdate2=='') return false;
+	bookdate1=new Date(bookdate1);
+	bookdate2=new Date(bookdate2);
+	$.post("http://localhost:8090/app/getBookRoomList",{},function(result){
 		console.log(result);
+		if(bookdate1>bookdate2){
+			alert('체크인날짜가 체크아웃보다 나중일 수 없습니다.');
+			return false;
+		}
 		$('#reserveRoom2').empty();
 		$.each(result,function(ndx,value){
 			str='<option value="'+value['roomcode']+'">'+value['roomname']+','+
@@ -146,7 +156,9 @@ $(document)
 })
 .on('click','#btnClear2',function(){
 	$('#roomname,#roomtypelist,#roompeople,#date1,#date2,#date3,#date4,#bookpeople,#roompriceall,#telNum,#bookName').val('');
+	$('#reserveRoom2').children('option').remove();
 	return false;
+	
 })
 
 .on('click','#btnRegister2',function(){	
@@ -172,25 +184,29 @@ $(document)
 		return false;
 	}
 	if($('#roomcode').val()!=''){//insert
-		$.post('http://localhost:8080/app/addBookRoom',
-	  {roompriceall:roompriceall,bookpeople:bookpeople,bookdate:bookdate,bookName:bookName,mobile:mobile},
+		$.post('http://localhost:8090/app/addBookRoom',
+	  {roomcode:$('#roomcode').val(),roompriceall:roompriceall,bookpeople:bookpeople,bookName:bookName,bookdate:bookdate,mobile:mobile},
 	  function(result){
 		  if(result=='ok'){
 			  str='<option>'+roomname+' '+roomtypelist+' '+'예약자명:'+bookName+' '+'전화번호:'+mobile+' '+bookpeople+'명'+'/'+roompeople+'명'+' '+bookdate+' '+roompriceall+'원'+'</option>'
 			  console.log(str);
 			  $('#comroom').append(str);
 			  $('#roomname,#roomtypelist,#roompriceall,#roompeople,#date1,#date2,#date3,#date4,#bookpeople,#roomPrice,#telNum,#bookName').val('');
+			  $('#reserveRoom2').children('option').remove();
 		  return false;
 			}
 		},'text');
 	}
 })
 .on('click','#btnDelete2',function(){
-	$.post('http://localhost:8080/app/deleteBookRoom',
-			{roomcode:roomcode},
+	$.post('http://localhost:8090/app/deleteBookRoom',
+			{roomcode:$('#roomcode').val()},
 			function(result){
 		if(result=="ok"){
 			$('#comroom option:selected').remove();
+			return false;
+		} else{
+			alert("삭제가 완료되지 않았습니다.");
 		}
 	},'text');
 })
