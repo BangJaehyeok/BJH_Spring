@@ -34,11 +34,11 @@
         <input type="date" id="date2" min="2021-08-31">
         <h2>객실종류</h2>
         <select style="width: 150px; font-size: 16px;"><br>
-            <option>SuiteRoom</option>
-            <option>FamilyRoom</option>
-            <option>DoubleRoom</option>
-            <option>SingleRoom</option>                  
-           </select> 
+        <option value='-'>전체</option>
+           <c:forEach items="${type}" var="roomtype">
+             <option value='${roomtype.typecode}'>${roomtype.name}</option>
+   		   </c:forEach>                 
+         </select> 
            <input type="button" id="btnroomlist" value=" 조회 "> 
         </div>
         <div id="reserveRoom">
@@ -109,9 +109,9 @@ $(document)
 .on('click','#btnroomlist',function(){//ajax호출
 	let bookdate1=$('#date1').val();
 	let bookdate2=$('#date2').val();
-	if(bookdate1==''||bookdate2=='') return false;
+	if(bookdate1==''||bookdate2=='') return false;	
 	bookdate1=new Date(bookdate1);
-	bookdate2=new Date(bookdate2);
+	bookdate2=new Date(bookdate2);	
 	$.post("http://localhost:8090/app/getBookRoomList",{},function(result){
 		console.log(result);
 		if(bookdate1>bookdate2){
@@ -185,10 +185,10 @@ $(document)
 	}
 	if($('#roomcode').val()!=''){//insert
 		$.post('http://localhost:8090/app/addBookRoom',
-	  {roomcode:$('#roomcode').val(),roompriceall:roompriceall,bookpeople:bookpeople,bookName:bookName,bookdate:bookdate,mobile:mobile},
+	  {roomcode:$('#roomcode').val(),roompriceall:roompriceall,bookpeople:bookpeople,bookName:bookName,bookdate1:bookdate1,bookdate2:bookdate2,mobile:mobile},
 	  function(result){
 		  if(result=='ok'){
-			  str='<option>'+roomname+' '+roomtypelist+' '+'예약자명:'+bookName+' '+'전화번호:'+mobile+' '+bookpeople+'명'+'/'+roompeople+'명'+' '+bookdate+' '+roompriceall+'원'+'</option>'
+			  str='<option>'+roomname+' '+roomtypelist+' '+'예약자명:'+bookName+' '+'전화번호:'+mobile+' '+bookpeople+'명'+'/'+roompeople+'명'+' '+bookdate1+'~'+bookdate2+' '+roompriceall+'원'+'</option>'
 			  console.log(str);
 			  $('#comroom').append(str);
 			  $('#roomname,#roomtypelist,#roompriceall,#roompeople,#date1,#date2,#date3,#date4,#bookpeople,#roomPrice,#telNum,#bookName').val('');

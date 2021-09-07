@@ -6,9 +6,12 @@
 <!-- namespace="인터페이스의 경로+이름' -->	
 <mapper namespace="com.human.app.iBook">
 	<insert id="doAddBook">
-		insert into booking values(seq_book.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6})
+		insert into booking values(seq_book.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
 	</insert>
 	<delete id="doDeleteBook">
 		delete from booking where roomcode=#{param1}
 	</delete>
+	<select id="getBookList" resultType="com.human.app.Booklist">
+		select from room where roomcode in (select roomcode from room minus select distinct roomcode from booking where bookingdate2 > day1 and bookingdate1 < day2)
+	</select>	
 </mapper>

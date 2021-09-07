@@ -11,6 +11,28 @@
 - 조회, 조건조회 만들어야함.
 - 방의 조건들을 많이 만들어놔서 예약조건을 충족하는 새로운 sql문을 만들어야함
 - 개인프로젝트 ui에 좀더 힘쓰기. 이쁘게 만들기
+- 체크인 예약조건 조회하는 sql문 짜보기
+- 체크인 날짜, 체크아웃 날짜 두날짜 사이에 체크인, 체크아웃이 있는 방은 예약불가
+- 예를들어 9월7일 ~ 9월10에 가능한 방을 본다면
+- 예약가능조건 : checkout <=09-07 or checkin >=09-10
+- 조회를 클릭하면 예약가능조건으로 
+- select * from booking where datebook2 <= day1 or datebook1 >= day2
+- 예약불가능객실들 조회조건 : select distinct roomcode from booking where datebook2 > day1 or datebook1 < day2
+
+- 예약불가능 조건으로 예약 테이블을 검색
+- select a.bookcode, b.name, b.howmany, a.bookingpeople, a.bookingdate1, a.bookingdate2, a.roompriceall, a.bookingname, a.mobile
+from booking a, room b
+where a.roomcode=b.roomcode 
+and a.bookingdate1 > day1 and a.bookingdate2 < day2
+order by bookingdate1
+- 결과를 예약된객실 목록에 표시
+
+- select * from room where roomcode in (
+select roomcode from room
+minus
+select distinct roomcode from booking where datebook2 > day1 and datebook1 < day2
+);
+- 위의 결과를 예약가능 객실 목록에 표시
 
 #### 20210906 (월) 작업
 1. 예약가능객실에 모든 객실 리스트가 출력되는 것(ajax)

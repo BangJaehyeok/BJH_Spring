@@ -94,6 +94,28 @@ public class HomeController {
 		return ja.toString();
 	}
 	
+	@RequestMapping(value="/getBookList",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String getBookList(HttpServletRequest hsr) {
+		iBook book = sqlSession.getMapper(iBook.class);
+		ArrayList<Booklist> booklist = book.getBookList();
+		//찾아진 데이터로 JSONArray만들기
+		JSONArray ja = new JSONArray();
+		for(int i=0;i<booklist.size();i++) {
+			JSONObject jo = new JSONObject();
+			jo.put("roomcode", booklist.get(i).getRoomcode());			
+			jo.put("roomname", booklist.get(i).getRoomname());
+			jo.put("typename", booklist.get(i).getTypename());
+			jo.put("howmany", booklist.get(i).getHowmany());
+			jo.put("howmuch", booklist.get(i).getHowmuch());
+			jo.put("bookingdate1", booklist.get(i).getBookingdate1());
+			jo.put("bookingdate2", booklist.get(i).getBookingdate2());
+			ja.add(jo);
+		}
+		return ja.toString();
+	}
+	
 	@RequestMapping(value="/addBookRoom",method=RequestMethod.POST,
 			produces = "application/text; charset=UTF-8")
 	@ResponseBody
@@ -101,11 +123,12 @@ public class HomeController {
 		int rcode = Integer.parseInt(hsr.getParameter("roomcode"));
 		int rpriceall = Integer.parseInt(hsr.getParameter("roompriceall"));
 		int bpeople = Integer.parseInt(hsr.getParameter("bookpeople"));		
-		String bookdate = hsr.getParameter("bookdate");
+		String bookdate1 = hsr.getParameter("bookdate1");
+		String bookdate2 = hsr.getParameter("bookdate2");
 		String bname = hsr.getParameter("bookName");
 		String mobile = hsr.getParameter("mobile");		
 		iBook book = sqlSession.getMapper(iBook.class);
-		book.doAddBook(rcode,rpriceall, bpeople, bookdate, bname, mobile);
+		book.doAddBook(rcode,rpriceall, bpeople, bname, bookdate1, bookdate2, mobile);
 		return "ok";
 	}
 	
