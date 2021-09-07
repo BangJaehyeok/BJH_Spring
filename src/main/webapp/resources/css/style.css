@@ -1,37 +1,20 @@
 /* 객실관리홈페이지 css설정 */
+#leftnav{
+	width:20%;
+	height:600px;
+	float : left;
+}
 
 #nav{    
-    width: 40%;
+    width: 25%;
     height: 600px;
     float: left;
-    margin-left: 100px;
 }
-#nav #roomlist{
-    width: 250px;
-    padding-left: 10px;
-}
-#sectionMenu{
-    width:10%;
+#nav1{
+	width: 30%;
     height: 600px;
-    float: left;
-    margin-left: 20px;
-}
-#sectionMenu h2{
-    font-size: 20px;
-}
-#section{
-    width: 40%;
-    height: 600px;
-    text-align: left;
-    float: left;
-    padding: 10px;
-    margin-left: 30px;
-    padding-top: 15px;
-}
-#footer{
-   
-    height: 100px;
-    clear: both;
+    float : left;
+    margin-left:20px;
 }
 /* 객실관리홈페이지 설정 끝 */
 /* 여기부터는 예약관리의 css설정 */

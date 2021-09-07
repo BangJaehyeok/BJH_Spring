@@ -1,15 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Hotel Login</title>
 </head>
-<body>
-<h1 style="text-align: center; font-size:50px; margin-top: 7%;">HOTEL SYSTEM</h1>
+<body style="background-image: url('./resources/img/hotel.jpg');
+background-repeat: no-repeat;
+background-size: cover;">
+<h1 style="margin-left: auto; margin-right: auto; text-align: center; color: pink; border: violet 1px solid; width: 450px; font-size:50px; margin-top: 7%;">HOTEL SYSTEM</h1>
 <div style="margin-left: auto; margin-right: auto;
- width: 400px; height: 250px; 
+ width: 400px; height: 250px; background-color: white;
 border: 1px solid black; margin-top: 5%;">
 <p style="text-align: center; font-size:larger; font-weight:1000; padding-top: 20px;">관리자 로그인</p>
 	<form method=post action="/app/check_user" id="frmLogin">	
@@ -45,6 +48,6 @@ $(document)
 		alert('비밀번호를 입력하시오.');
 		return false;
 	}
-}
+})
 </script>
 </html>

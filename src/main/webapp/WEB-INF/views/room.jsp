@@ -19,17 +19,20 @@
         <h2 style="font-size: 20px;"><a href="booking">예약관리</a>  
         <a href="#"><u>객실관리</u></a></h2>
     </div>
+    <div id="leftnav">
+    </div>
     <div id="nav">
-        <h2>객실목록</h2>
-        <select id="reserveRoom2" size="6" style="width: 250px; height: 250px; 
-        font-size: 15px; padding-top: 10px; padding-left: 5px;">
+        <h2 style="text-align:center;">객실목록</h2>        
+        <select id="reserveRoom2" size="6" style="width: 260px; height: 300px; 
+        font-size: 15px; padding-top: 10px;  padding-left: 5px;">
        <%--  <c:forEach items="${list}" var="room">
 	        <option value="${room.roomcode}">${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>
         </c:forEach> --%>
         <!-- forEach문으로 반복하여 나타낸다. -->
-        </select>
+        </select>        
     </div>
-    <h2>객실 정보</h2>
+    <div id="nav1">
+    <h2 style="text-align:center;">객실 정보</h2>
     <table>
         <tr>
             <td>객실명</td>
@@ -38,7 +41,7 @@
         </tr>
         <tr>
             <td>객실분류</td>
-            <td><select  id="selType" size="5" style="width: 175px; height: 120px; font-size:15px;"><br>
+            <td><select id="selType" size="5" style="width: 175px; height: 120px; font-size:15px;"><br>
             <c:forEach items="${type}" var="roomtype">
 	        	<option value='${roomtype.typecode}'>${roomtype.typecode}.${roomtype.name}</option>
         	</c:forEach>
@@ -60,10 +63,8 @@
         	<input type=button value='Clear' id="btnClear">
         </td>
         </tr>
-
     </table>
-    <div id="footer">       
-    </div>
+  </div>   
 </body>
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script>
