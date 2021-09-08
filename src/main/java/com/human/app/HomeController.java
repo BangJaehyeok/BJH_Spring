@@ -98,9 +98,11 @@ public class HomeController {
 			produces = "application/text; charset=UTF-8")
 	@ResponseBody
 	public String getBookList(HttpServletRequest hsr) {
+		String day1 = hsr.getParameter("day1");
+		String day2 = hsr.getParameter("day2");
 		iBook book = sqlSession.getMapper(iBook.class);
-		ArrayList<Booklist> booklist = book.getBookList();
-		//찾아진 데이터로 JSONArray만들기
+		ArrayList<Booklist> booklist = book.getBookList(day1,day2);
+		//찾아진 데이터로 JSONArray만들기		
 		JSONArray ja = new JSONArray();
 		for(int i=0;i<booklist.size();i++) {
 			JSONObject jo = new JSONObject();
@@ -109,17 +111,44 @@ public class HomeController {
 			jo.put("typename", booklist.get(i).getTypename());
 			jo.put("howmany", booklist.get(i).getHowmany());
 			jo.put("howmuch", booklist.get(i).getHowmuch());
-			jo.put("bookingdate1", booklist.get(i).getBookingdate1());
-			jo.put("bookingdate2", booklist.get(i).getBookingdate2());
+			jo.put("bookingdate1", booklist.get(i).getBookdate1());
+			jo.put("bookingdate2", booklist.get(i).getBookdate2());			
 			ja.add(jo);
 		}
+		return ja.toString();
+	}
+	@RequestMapping(value="/getBooked",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String getBooked(HttpServletRequest hsr) {
+		String day1 = hsr.getParameter("day1");
+		String day2 = hsr.getParameter("day2");		
+		iBook book = sqlSession.getMapper(iBook.class);
+		ArrayList<Booked> booked = book.getBooked(day1,day2);
+		//찾아진 데이터로 JSONArray만들기
+		JSONArray ja = new JSONArray();
+		for(int i=0;i<booked.size();i++) {			
+			JSONObject jo = new JSONObject();
+			jo.put("bookcode", booked.get(i).getBookcode());
+			jo.put("roomcode", booked.get(i).getRoomcode());
+			jo.put("typename", booked.get(i).getTypename());
+			jo.put("roomname", booked.get(i).getRoomname());
+			jo.put("roomprice", booked.get(i).getRoompriceall());
+			jo.put("bookingpeople", booked.get(i).getBookingpeople());			
+			jo.put("roompeople", booked.get(i).getHowmany());
+			jo.put("bookdate1", booked.get(i).getBookingdate1());
+			jo.put("bookdate2", booked.get(i).getBookingdate2());
+			jo.put("bookingname", booked.get(i).getBookingname());			
+			jo.put("mobile", booked.get(i).getMobile());
+			ja.add(jo);
+		}		
 		return ja.toString();
 	}
 	
 	@RequestMapping(value="/addBookRoom",method=RequestMethod.POST,
 			produces = "application/text; charset=UTF-8")
 	@ResponseBody
-	public String addBookRoom(HttpServletRequest hsr) {
+	public String addBookRoom(HttpServletRequest hsr) {		
 		int rcode = Integer.parseInt(hsr.getParameter("roomcode"));
 		int rpriceall = Integer.parseInt(hsr.getParameter("roompriceall"));
 		int bpeople = Integer.parseInt(hsr.getParameter("bookpeople"));		
@@ -236,6 +265,19 @@ public class HomeController {
 		int howmany = Integer.parseInt(hsr.getParameter("howmany"));
 		int howmuch = Integer.parseInt(hsr.getParameter("howmuch"));		
 		room.doUpdateRoom(rcode, rname, rtype, howmany, howmuch);
+		return "ok";
+	}
+	
+	@RequestMapping(value="/updateBook",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String updateBook(HttpServletRequest hsr) {
+		iBook book = sqlSession.getMapper(iBook.class);
+		int rcode = Integer.parseInt(hsr.getParameter("roomcode"));
+		int bpeople = Integer.parseInt(hsr.getParameter("bookingpeople"));
+		String bname = hsr.getParameter("bookingname");
+		String mobile = hsr.getParameter("mobile");
+		book.doUpdateBook(rcode, bpeople, bname, mobile);
 		return "ok";
 	}
 	

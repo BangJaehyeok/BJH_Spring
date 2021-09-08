@@ -52,7 +52,7 @@
     <table cellpadding="5" cellspacing="0" style="margin-left: auto; margin-right: auto; padding-left:15px; padding-top:15px">
     	<tr>
     		<td style="width:100px;">객실이름</td>
-    		<td><input type="text" id="roomname">
+    		<td><input type="text" id="roomname" readonly>
     		<input type=hidden id="roomcode"></td>
     	</tr>
     	<tr>
@@ -70,16 +70,16 @@
     	</tr>
     	<tr>
     		<td>최대인원</td>
-    		<td><input type="number" id="roompeople"></td>
+    		<td><input type="number" id="roompeople" readonly></td>
     	</tr>
     	<tr>
     		<td>예약기간</td>
-    		<td><input type="date" id="date3" min="2021-08-30">~
-        <input type="date" id="date4" min="2021-08-30"></td>
+    		<td><input type="date" id="date3" min="2021-08-30" readonly>~
+        <input type="date" id="date4" min="2021-08-30" readonly></td>
     	</tr>
     	<tr>
     		<td>숙박비총액</td>
-    		<td><input type="text" id="roompriceall">원</td>
+    		<td><input type="text" id="roompriceall" readonly>원</td>
     	</tr>
     	<tr>
     		<td>예약자명</td>
@@ -93,6 +93,7 @@
         <br>
         <p style="text-align:center;"><input type="button" id="btnRegister2" value="  예약완료  ">
         <input type="button" id="btnClear2" value="  비우기  ">
+        <input type="button" id="btnUpdate" value=" 예약수정 ">
         <input type="button" id="btnDelete2" value="  예약취소  ">
     	</p>
     </div>
@@ -107,22 +108,44 @@
 <script>
 $(document)
 .on('click','#btnroomlist',function(){//ajax호출
+	let roompeople=$('#roompeople').val();
+	let roompriceall=$('#roompriceall').val();
+	let bookpeople=$('#bookpeople').val();
+	let bookName=$('#bookName').val();	
 	let bookdate1=$('#date1').val();
-	let bookdate2=$('#date2').val();
+	let bookdate2=$('#date2').val();	
 	if(bookdate1==''||bookdate2=='') return false;	
-	bookdate1=new Date(bookdate1);
-	bookdate2=new Date(bookdate2);	
-	$.post("http://localhost:8090/app/getBookRoomList",{},function(result){
+	 $.post("http://localhost:8080/app/getBookList",
+			{day1:bookdate1,day2:bookdate2},
+			function(result){
 		console.log(result);
+		bookdate1=new Date(bookdate1);
+		bookdate2=new Date(bookdate2);
 		if(bookdate1>bookdate2){
 			alert('체크인날짜가 체크아웃보다 나중일 수 없습니다.');
 			return false;
 		}
 		$('#reserveRoom2').empty();
 		$.each(result,function(ndx,value){
-			str='<option value="'+value['roomcode']+'">'+value['roomname']+','+
-			value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
+			str='<option value="'+value['roomcode']+'">'+value['roomname']+','
+			+value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
 			$('#reserveRoom2').append(str);
+		});
+	},'json');	
+	bookdate1=$('#date1').val();
+	bookdate2=$('#date2').val();
+	$.post("http://localhost:8080/app/getBooked",
+			{day1:bookdate1,day2:bookdate2},
+			function(result){
+		console.log(result);
+		$('#comroom').empty();
+		$.each(result,function(ndx,value){
+			str='<option value="'+value['roomcode']+'">'+value['roomname']+','+value['typename']+','+
+			value['bookingname']+','+value['mobile']+','+
+			value['bookingpeople']+','+value['roompeople']+','
+			+value['bookdate1']+'~'+value['bookdate2']+','+value['roomprice']+'</option>'
+			  console.log(str);
+			  $('#comroom').append(str);
 		});
 	},'json');
 	return false;
@@ -136,7 +159,28 @@ $(document)
 	$('#date3').val($('#date1').val());
 	$('#date4').val($('#date2').val());
 	let code=$(this).val();
-	$('#roomcode').val(code);//DB호출을 위한 KEY값 저장, 나중에 삭제할때 써먹으려고 씀.	
+	console.log(code);
+	console.log($('#roomcode').val(code));
+	$('#roomcode').val(code);//DB호출을 위한 KEY값 저장, 나중에 삭제할때 써먹으려고 씀.
+	
+	return false;
+})
+.on('click','#comroom option',function(){
+	let a=$(this).text();
+	let ar=a.split(',');
+	$('#roomname').val(ar[0]);
+	$('#roomtypelist option:contains("'+ar[1]+'")').prop('selected','selected');
+	$('#bookName').val(ar[2]);
+	$('#telNum').val(ar[3]);
+	$('#bookpeople').val(ar[4]);
+	$('#roompeople').val(ar[5]);
+	$('#roompriceall').val(ar[7]);
+	$('#date3').val($('#date1').val());
+	$('#date4').val($('#date2').val());
+	let code=$(this).val();
+	console.log(code);
+	console.log($('#comroom').val(code));	
+	$('#roomcode').val(code);//DB호출을 위한 KEY값 저장, 나중에 삭제할때 써먹으려고 씀.
 	return false;
 })
 .on('click','#roompriceall',function(){
@@ -173,7 +217,6 @@ $(document)
 	let bookpeople=$('#bookpeople').val();
 	let bookName=$('#bookName').val();
 	let mobile=$('#telNum').val();
-	console.log(roomcode);
 	
 	if(roomname==''||roomtypelist==''||roompeople==''||roompriceall==''||bookpeople==''||bookName==''||mobile==''){
 		alert("누락된 값이 있습니다.");
@@ -184,7 +227,7 @@ $(document)
 		return false;
 	}
 	if($('#roomcode').val()!=''){//insert
-		$.post('http://localhost:8090/app/addBookRoom',
+		$.post('http://localhost:8080/app/addBookRoom',
 	  {roomcode:$('#roomcode').val(),roompriceall:roompriceall,bookpeople:bookpeople,bookName:bookName,bookdate1:bookdate1,bookdate2:bookdate2,mobile:mobile},
 	  function(result){
 		  if(result=='ok'){
@@ -199,7 +242,7 @@ $(document)
 	}
 })
 .on('click','#btnDelete2',function(){
-	$.post('http://localhost:8090/app/deleteBookRoom',
+	$.post('http://localhost:8080/app/deleteBookRoom',
 			{roomcode:$('#roomcode').val()},
 			function(result){
 		if(result=="ok"){
@@ -209,6 +252,32 @@ $(document)
 			alert("삭제가 완료되지 않았습니다.");
 		}
 	},'text');
+})
+.on('click','#btnUpdate',function(){
+	let roomcode=$('#roomcode').val();
+	let roomname=$('#roomname').val();
+	let bookpeople=$('#bookpeople').val();
+	let bookname=$('#bookName').val();
+	let mobile=$('#telNum').val();
+	let roomtypelist=$('#roomtypelist option:selected').text();
+	let roompeople=$('#roompeople').val();
+	let roompriceall=$('#roompriceall').val();		
+	let bookdate1=$('#date1').val();
+	let bookdate2=$('#date2').val();	
+	$.post('http://localhost:8080/app/updateBook',
+		{roomcode:roomcode,bookingpeople:bookpeople,
+		bookingname:bookname,mobile:mobile},
+		function(result){
+			if(result=='ok'){
+				console.log(result);
+				alert("예약수정이 완료되었습니다.");
+				str='<option>'+roomname+','+roomtypelist+','+
+				bookname+','+mobile+','+bookpeople+','+roompeople+','
+				+bookdate1+'~'+bookdate2+','+roompriceall+'</option>'
+				$("#comroom option:selected").html(str);
+			}
+		}, 'text');
+	return false;
 })
 
 </script>
