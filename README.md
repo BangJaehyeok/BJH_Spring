@@ -6,10 +6,16 @@
 - 그리고 해당 jsp파일에 써있는 localhost:8080에 대한 IP주소를 실행시키는 톰캣서버에 맞춰 변경하거나 유지한다.
 - 위의 모든 상황에도 안된다면 그냥 git에서 다시 받는 것을 추천.
 
+#### 20210909(목) 작업
+- sql문을 쓸 때 주의사항
+- 각각 다른 곳에서 조인했다고 하더라도 각 테이블의 컬럼명이 같다면 (ex) select a.name, b.name from room a, roomtype b where a.type=b.typecode;
+그렇다면 sql에서 오류가 난다. 그래서 각각의 이름을 다시 정의해줘야한다. 즉, a.name roomname, b.name typename 이렇게.
+
+
 #### 20210908 (수) 작업
 - 오류내용 : console창에서 
 Failed to load resource: the server responded with a status of 500 ()
-이런 내용이 뜬다면 그것은 sql서버의 컬럼과 내가 입력한 값들이 일치하지 않는다는 뜻이다. sql컬럼들을 잘 확인해보자.
+이런 내용이 뜬다면 그것은 sql DB의 컬럼과 내가 입력한 값들이 일치하지 않는다는 뜻이다. sql컬럼들을 잘 확인해보자.
 
 
 #### 20210907 (화) 작업

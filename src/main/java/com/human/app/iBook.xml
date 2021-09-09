@@ -13,12 +13,18 @@
 	</delete>
 	<select id="getBooked" resultType="com.human.app.Booked">
 		<![CDATA[select a.bookcode,a.roomcode,b.name roomname,c.name typename,b.howmany, a.bookingpeople, a.bookingdate1, a.bookingdate2, a.roompriceall, a.bookingname, a.mobile
-		from booking a, room b, roomtype c where a.bookingdate2 > #{param1} and a.bookingdate1 < #{param2} and a.roomcode = b.roomcode and b.type=c.typecode order by a.bookingdate1]]>
+		from booking a, room b, roomtype c 
+		where a.bookingdate2 > #{param1} and a.bookingdate1 < #{param2} 
+		and a.roomcode = b.roomcode and b.type=c.typecode 
+		order by a.bookingdate1]]>
 	</select>
 	<select id="getBookList" resultType="com.human.app.Booklist">
-		<![CDATA[select a.roomcode,a.name roomname,b.name typename, a.howmany, a.howmuch from room a, roomtype b where a.roomcode in
+		<![CDATA[select a.roomcode,a.name roomname,b.name typename, a.howmany, a.howmuch 
+		from room a, roomtype b 
+		where a.roomcode in
 		(select roomcode from room minus select distinct roomcode from booking where bookingdate2 > #{param1} and bookingdate1 < #{param2})
-		and a.type=b.typecode order by a.howmuch]]>
+		and a.type=b.typecode 
+		order by a.howmuch]]>
 	</select>
 	<update id="doUpdateBook">
 		update booking set bookingpeople=#{param2},bookingname=#{param3},mobile=#{param4}

@@ -280,5 +280,4 @@ public class HomeController {
 		book.doUpdateBook(rcode, bpeople, bname, mobile);
 		return "ok";
 	}
-	
 }
