@@ -21,7 +21,9 @@
   </head>
 <body>
     <button type="button" style="float:right;" onclick="location.href='home'">  로그아웃  </button>
-    <div id="header">
+    <div id="header" style="background-image: url('./resources/img/hotel2.jpg');
+background-repeat: no-repeat;
+background-size: cover;">
         <h1 style="font-size: 45px;">관리자홈페이지-예약관리</h1><br>
         <h2 style="font-size: 20px;"><a href="booking">예약관리</a>  
         <a href="room"><u>객실관리</u></a></h2>
@@ -33,7 +35,7 @@
         <input type="date" id="date1" min="2021-08-31">~
         <input type="date" id="date2" min="2021-08-31">
         <h2>객실종류</h2>
-        <select style="width: 150px; font-size: 16px;"><br>
+        <select id="roomTypeMenu"><br>
         <option value='-'>전체</option>
            <c:forEach items="${type}" var="roomtype">
              <option value='${roomtype.typecode}'>${roomtype.name}</option>
@@ -43,15 +45,15 @@
         </div>
         <div id="reserveRoom">
         <h2>예약가능한 객실</h2>
-        <select id="reserveRoom2" size="8" style="width: 260px; height: 280px; font-size: 16px;"><br>
+        <select id="reserveRoom2" size="8"><br>
          
         </select>   
         </div>
     </div>
-    <div id="sectionMenu2" style="border: 1px solid black; margin-top: 63px; height:600px;">
-    <table cellpadding="5" cellspacing="0" style="margin-left: auto; margin-right: auto; padding-left:15px; padding-top:15px">
+    <div id="sectionMenu2">
+    <table id="roomTable" cellpadding="5" cellspacing="0">
     	<tr>
-    		<td style="width:100px;">객실이름</td>
+    		<td style="width:120px;">객실이름</td>
     		<td><input type="text" id="roomname" readonly>
     		<input type=hidden id="roomcode"></td>
     	</tr>
@@ -99,11 +101,12 @@
     </div>
     <div id="section2">
         <h2 style="font-size: 22px;">예약된 객실</h2>
-        <select id="comroom" size="6" style="width: 500px; height: 600px; text-align: left;float: left;    
-        margin-left: 0px; border: 1px black solid;">        
-        </select>
+        <select id="comroom" size="6"></select>
+    </div>
+    <div id="footer">
     </div>    
 </body>
+
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script>
 $(document)

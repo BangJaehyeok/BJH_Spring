@@ -14,7 +14,9 @@
 </head>
 <body>
 <button type="button" style="float:right;" onclick="location.href='home'">  로그아웃  </button>
-    <div id="header">
+    <div id="header" style="background-image: url('./resources/img/hotel2.jpg');
+background-repeat: no-repeat;
+background-size: cover;">
         <h1 style="font-size: 45px;">관리자홈페이지-객실관리</h1><br>
         <h2 style="font-size: 20px;"><a href="booking">예약관리</a>  
         <a href="#"><u>객실관리</u></a></h2>
@@ -23,8 +25,7 @@
     </div>
     <div id="nav">
         <h2 style="text-align:center;">객실목록</h2>        
-        <select id="reserveRoom2" size="6" style="width: 260px; height: 300px; 
-        font-size: 15px; padding-top: 10px;  padding-left: 5px;">
+        <select id="reserveRoom2" size="6">
        <%--  <c:forEach items="${list}" var="room">
 	        <option value="${room.roomcode}">${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>
         </c:forEach> --%>
@@ -41,7 +42,7 @@
         </tr>
         <tr>
             <td>객실분류</td>
-            <td><select id="selType" size="5" style="width: 175px; height: 120px; font-size:15px;"><br>
+            <td><select id="selType" size="5"><br>
             <c:forEach items="${type}" var="roomtype">
 	        	<option value='${roomtype.typecode}'>${roomtype.typecode}.${roomtype.name}</option>
         	</c:forEach>
@@ -64,7 +65,8 @@
         </td>
         </tr>
     </table>
-  </div>   
+  </div>
+  <div id="footer"></div>   
 </body>
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script>

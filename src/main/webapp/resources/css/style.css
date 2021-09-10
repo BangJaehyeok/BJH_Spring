@@ -16,14 +16,29 @@
     float : left;
     margin-left:20px;
 }
+#reserveRoom2{
+	width: 260px; 
+	height: 300px; 
+    font-size: 15px; 
+    padding-top: 10px;  
+    padding-left: 5px;
+}
+#selType{
+	width: 175px; 
+	height: 120px; 
+	font-size:15px;
+}
 /* 객실관리홈페이지 설정 끝 */
 /* 여기부터는 예약관리의 css설정 */
 #header{
-    height: 180px; 
+    height: 300px; 
     text-align: center;
     padding: 30px;
     background-color: cadetblue;
-    color: oldlace;    
+    color: oldlace;     
+}
+#header h1,h2{
+	margin-top:50px;
 }
 #section{
     width: 20%;
@@ -44,18 +59,35 @@
     width: 250px;
     padding-left: 10px;
 }
+#roomTypeMenu{
+	width: 150px; 
+	font-size: 16px;
+}
+
 #nav2 #reserveRoom{
     width: 250px;
     padding-left: 10px;
     margin-top: 50px;
     
 }
+#reserveRoom2{
+	width: 260px; 
+	height: 280px; 
+	font-size: 16px;
+}
 #sectionMenu2{
     width: 31%;
-    height: 700px;
+    height: 600px;
     float: left;
     background-color: white;
-    
+    border: 1px solid black; 
+    margin-top: 128px; 
+}
+#roomTable{
+	margin-left: auto; 
+	margin-right: auto; 
+	padding-left:15px; 
+	padding-top:15px;
 }
 #sectionMenu2 h2{
     font-size: 20px;
@@ -66,11 +98,18 @@
     text-align: left;
     float: left;    
     margin-left: 10px;
-    
-    
+    margin-top : 33px;
+}
+#comroom{
+	width: 500px; 
+	height: 600px; 
+	text-align: left;
+	float: left;    
+    margin-left: 0px; 
+    border: 1px black solid;"
 }
 
-#footer2{
+#footer{
    
     height: 100px;
     clear: both;

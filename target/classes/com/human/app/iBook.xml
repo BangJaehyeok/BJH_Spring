@@ -22,7 +22,10 @@
 		<![CDATA[select a.roomcode,a.name roomname,b.name typename, a.howmany, a.howmuch 
 		from room a, roomtype b 
 		where a.roomcode in
-		(select roomcode from room minus select distinct roomcode from booking where bookingdate2 > #{param1} and bookingdate1 < #{param2})
+		(select roomcode from room 
+		minus 
+		select distinct roomcode from booking 
+		where bookingdate2 > #{param1} and bookingdate1 < #{param2})
 		and a.type=b.typecode 
 		order by a.howmuch]]>
 	</select>

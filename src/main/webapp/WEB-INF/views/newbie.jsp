@@ -11,7 +11,7 @@ background-repeat: no-repeat;
 background-size: cover;">
 <div style="margin-left: auto; margin-right: auto;
  width: 400px; height: 550px; background-color:white;
-border: 1px solid black; margin-top: 5%;">
+border: 1px solid black; margin-top: 10%;">
 <p style="text-align: center; font-size:28px; font-weight:1000; padding-top: 20px;">회원가입</p>
 <form method=post action="/app/join" id="frmjoin">
     <table cellpadding="5" cellspacing="0" style="margin-left: 25px;">
