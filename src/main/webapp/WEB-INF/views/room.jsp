@@ -18,14 +18,16 @@
 background-repeat: no-repeat;
 background-size: cover;">
         <h1 style="font-size: 45px;">관리자홈페이지-객실관리</h1><br>
-        <h2 style="font-size: 20px;"><a href="booking">예약관리</a>  
-        <a href="#"><u>객실관리</u></a></h2>
+        <h2>
+        <input type="button" id="btngobook" onclick="location.href='booking'" value=" 예약관리  ">
+		<input type="button" id="btngoroom" onclick="location.href='room'" value=" 객실관리  ">
+        </h2>
     </div>
     <div id="leftnav">
     </div>
     <div id="nav">
-        <h2 style="text-align:center;">객실목록</h2>        
-        <select id="reserveRoom2" size="6">
+        <h2>객실목록</h2>        
+        <select id="reserveRoom1" size="6">
        <%--  <c:forEach items="${list}" var="room">
 	        <option value="${room.roomcode}">${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>
         </c:forEach> --%>
@@ -33,8 +35,8 @@ background-size: cover;">
         </select>        
     </div>
     <div id="nav1">
-    <h2 style="text-align:center;">객실 정보</h2>
-    <table>
+    <h2>객실 정보</h2>
+    <table id="typetable" cellpadding="5" cellspacing="5">
         <tr>
             <td>객실명</td>
             <td><input type="text" id="roomName">
@@ -49,7 +51,7 @@ background-size: cover;">
                 </select></td>
         </tr>
         <tr>
-            <td>최대숙박인원</td>
+            <td>최대인원</td>
             <td><input type="number" id="txtNum"></td>
         </tr>
         <tr>
@@ -60,8 +62,8 @@ background-size: cover;">
         <td colspan=2 align=center>
         <br>
         	<input type=button value='등록/수정' id="btnAdd">&nbsp;
-        	<input type=button value='삭제' id="btnDelete">&nbsp;
-        	<input type=button value='Clear' id="btnClear">
+        	<input type=button value=' 삭제 ' id="btnDelete">&nbsp;
+        	<input type=button value=' Clear ' id="btnClear">
         </td>
         </tr>
     </table>
@@ -77,11 +79,11 @@ $(document)
 		$.each(result,function(ndx,value){
 			str='<option value="'+value['roomcode']+'">'+value['roomname']+','+
 			value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
-			$('#reserveRoom2').append(str);
+			$('#reserveRoom1').append(str);
 		});
 	},'json');
 })
-.on('click','#reserveRoom2 option',function(){
+.on('click','#reserveRoom1 option',function(){
 	let a=$(this).text();
 	let ar=a.split(',');
 	$('#roomName').val(ar[0]);
@@ -103,7 +105,7 @@ $(document)
 			function(result){
 		if(result=="ok"){
 			$('#btnClear').trigger('click');//Clear버튼 클릭 작동.
-			$('#reserveRoom2 option:selected').remove(); //roomlist에서 제거
+			$('#reserveRoom1 option:selected').remove(); //roomlist에서 제거
 			return false;
 		}
 	},'text');

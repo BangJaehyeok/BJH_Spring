@@ -25,33 +25,41 @@
 background-repeat: no-repeat;
 background-size: cover;">
         <h1 style="font-size: 45px;">관리자홈페이지-예약관리</h1><br>
-        <h2 style="font-size: 20px;"><a href="booking">예약관리</a>  
-        <a href="room"><u>객실관리</u></a></h2>
+        <h2>
+        <input type="button" id="btngobook" onclick="location.href='booking'" value=" 예약관리  ">
+		<input type="button" id="btngoroom" onclick="location.href='room'" value=" 객실관리  ">
+        </h2>
     </div>    
     
     <div id="nav2">        
-        <div id="findRoom">
-        <h2>숙박기간</h2>
-        <input type="date" id="date1" min="2021-08-31">~
-        <input type="date" id="date2" min="2021-08-31">
-        <h2>객실종류</h2>
-        <select id="roomTypeMenu"><br>
+        <span id="findRoom">
+     <p style="font-size: 24px;">객실예약조회</p><br>   
+        숙박기간&nbsp;&nbsp;
+        <input type="date" id="date1">~
+        <input type="date" id="date2">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;        
+        객실종류&nbsp;&nbsp;
+        <select id="roomTypeMenu">
         <option value='-'>전체</option>
            <c:forEach items="${type}" var="roomtype">
              <option value='${roomtype.typecode}'>${roomtype.name}</option>
    		   </c:forEach>                 
          </select> 
-           <input type="button" id="btnroomlist" value=" 조회 "> 
+           <input type="button" id="btnroomlist" value="  예약조회   ">
+           </span>            
         </div>
+        <div id="binnav">
+		</div>
         <div id="reserveRoom">
-        <h2>예약가능한 객실</h2>
-        <select id="reserveRoom2" size="8"><br>
-         
+        <h2 style="text-align: center;">예약가능한 객실</h2>
+        <select id="reserveRoom2" size="8"><br>         
         </select>   
         </div>
     </div>
+    
     <div id="sectionMenu2">
-    <table id="roomTable" cellpadding="5" cellspacing="0">
+    <table id="roomTable" cellpadding="5" cellspacing="5">
     	<tr>
     		<td style="width:120px;">객실이름</td>
     		<td><input type="text" id="roomname" readonly>
@@ -59,7 +67,7 @@ background-size: cover;">
     	</tr>
     	<tr>
     		<td>객실종류</td>
-    		<td><select id="roomtypelist" style="width:120px;">
+    		<td><select id="roomtypelist" style="width:177px;">
     		<c:forEach items="${type}" var="roomtype">
     			<option value='${roomtype.typecode}'>${roomtype.name}</option>
     		</c:forEach>
@@ -76,12 +84,12 @@ background-size: cover;">
     	</tr>
     	<tr>
     		<td>예약기간</td>
-    		<td><input type="date" id="date3" min="2021-08-30" readonly>~
-        <input type="date" id="date4" min="2021-08-30" readonly></td>
+    		<td><input type="date" id="date3" readonly>&nbsp;~&nbsp;
+        <input type="date" id="date4" readonly></td>
     	</tr>
     	<tr>
     		<td>숙박비총액</td>
-    		<td><input type="text" id="roompriceall" readonly>원</td>
+    		<td><input type="text" id="roompriceall" readonly>&nbsp;원</td>
     	</tr>
     	<tr>
     		<td>예약자명</td>
@@ -93,12 +101,14 @@ background-size: cover;">
     	</tr>
     </table>
         <br>
-        <p style="text-align:center;"><input type="button" id="btnRegister2" value="  예약완료  ">
-        <input type="button" id="btnClear2" value="  비우기  ">
-        <input type="button" id="btnUpdate" value=" 예약수정 ">
-        <input type="button" id="btnDelete2" value="  예약취소  ">
+        <p style="text-align:center;">
+        <input type="button" id="btnRegister2" value="  예약완료  ">
+        <input type="button" id="btnClear2" value="   비우기   ">
+        <input type="button" id="btnUpdate" value="  예약수정  ">
+        <input type="button" id="btnDelete2" value="   예약취소   ">
     	</p>
     </div>
+    
     <div id="section2">
         <h2 style="font-size: 22px;">예약된 객실</h2>
         <select id="comroom" size="6"></select>
