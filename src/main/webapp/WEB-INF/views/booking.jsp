@@ -214,6 +214,7 @@ $(document)
 .on('click','#btnClear2',function(){
 	$('#roomname,#roomtypelist,#roompeople,#date1,#date2,#date3,#date4,#bookpeople,#roompriceall,#telNum,#bookName').val('');
 	$('#reserveRoom2').children('option').remove();
+	$('#comroom').children('option').remove();
 	return false;
 	
 })
