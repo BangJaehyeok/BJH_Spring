@@ -41,9 +41,9 @@ background-size: cover;">
         &nbsp;&nbsp;        
         객실종류&nbsp;&nbsp;
         <select id="roomTypeMenu">
-        <option value='-'>전체</option>
+        <option value='all'>전체</option>
            <c:forEach items="${type}" var="roomtype">
-             <option value='${roomtype.typecode}'>${roomtype.name}</option>
+             <option value='${roomtype.name}'>${roomtype.name}</option>
    		   </c:forEach>                 
          </select> 
            <input type="button" id="btnroomlist" value="  예약조회   ">
@@ -119,6 +119,7 @@ background-size: cover;">
 
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 <script>
+document.getElementById('date1').valueAsDate = new Date();
 $(document)
 .on('click','#btnroomlist',function(){//ajax호출
 	let roompeople=$('#roompeople').val();
@@ -126,10 +127,12 @@ $(document)
 	let bookpeople=$('#bookpeople').val();
 	let bookName=$('#bookName').val();	
 	let bookdate1=$('#date1').val();
-	let bookdate2=$('#date2').val();	
-	if(bookdate1==''||bookdate2=='') return false;	
-	 $.post("http://localhost:8080/app/getBookList",
-			{day1:bookdate1,day2:bookdate2},
+	let bookdate2=$('#date2').val();
+	let roomtype=$('#roomTypeMenu').val();
+	if(bookdate1==''||bookdate2=='') return false;
+	if(roomtype!="all"){
+		$.post("http://localhost:8080/app/getBookList",
+			{day1:bookdate1,day2:bookdate2,roomtype:roomtype},
 			function(result){
 		console.log(result);
 		bookdate1=new Date(bookdate1);
@@ -144,7 +147,27 @@ $(document)
 			+value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
 			$('#reserveRoom2').append(str);
 		});
-	},'json');	
+	},'json');
+	} else {
+		$.post("http://localhost:8080/app/getBookListAll",
+				{day1:bookdate1,day2:bookdate2},
+				function(result){
+			console.log(result);
+			bookdate1=new Date(bookdate1);
+			bookdate2=new Date(bookdate2);
+			if(bookdate1>bookdate2){
+				alert('체크인날짜가 체크아웃보다 나중일 수 없습니다.');
+				return false;
+			}
+			$('#reserveRoom2').empty();
+			$.each(result,function(ndx,value){
+				str='<option value="'+value['roomcode']+'">'+value['roomname']+','
+				+value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
+				$('#reserveRoom2').append(str);
+			});
+		},'json');
+	}
+	 	
 	bookdate1=$('#date1').val();
 	bookdate2=$('#date2').val();
 	$.post("http://localhost:8080/app/getBooked",

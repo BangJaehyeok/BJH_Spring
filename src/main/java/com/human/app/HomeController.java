@@ -100,8 +100,13 @@ public class HomeController {
 	public String getBookList(HttpServletRequest hsr) {
 		String day1 = hsr.getParameter("day1");
 		String day2 = hsr.getParameter("day2");
+		String roomtype = hsr.getParameter("roomtype");
+		String whichRoom="";
+		if(!roomtype.equals("all")) {
+			whichRoom=roomtype;
+		}
 		iBook book = sqlSession.getMapper(iBook.class);
-		ArrayList<Booklist> booklist = book.getBookList(day1,day2);
+		ArrayList<Booklist> booklist = book.getBookList(day1,day2,whichRoom);
 		//찾아진 데이터로 JSONArray만들기		
 		JSONArray ja = new JSONArray();
 		for(int i=0;i<booklist.size();i++) {
@@ -117,6 +122,31 @@ public class HomeController {
 		}
 		return ja.toString();
 	}
+	
+	@RequestMapping(value="/getBookListAll",method=RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String getBookListAll(HttpServletRequest hsr) {
+		String day1 = hsr.getParameter("day1");
+		String day2 = hsr.getParameter("day2");
+		iBook book = sqlSession.getMapper(iBook.class);
+		ArrayList<Booklistall> booklist = book.getBookListAll(day1,day2);
+		//찾아진 데이터로 JSONArray만들기		
+		JSONArray ja = new JSONArray();
+		for(int i=0;i<booklist.size();i++) {
+			JSONObject jo = new JSONObject();
+			jo.put("roomcode", booklist.get(i).getRoomcode());			
+			jo.put("roomname", booklist.get(i).getRoomname());
+			jo.put("typename", booklist.get(i).getTypename());
+			jo.put("howmany", booklist.get(i).getHowmany());
+			jo.put("howmuch", booklist.get(i).getHowmuch());
+			jo.put("bookingdate1", booklist.get(i).getBookdate1());
+			jo.put("bookingdate2", booklist.get(i).getBookdate2());			
+			ja.add(jo);
+		}
+		return ja.toString();
+	}
+	
 	@RequestMapping(value="/getBooked",method=RequestMethod.POST,
 			produces = "application/text; charset=UTF-8")
 	@ResponseBody
