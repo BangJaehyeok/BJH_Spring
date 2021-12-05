@@ -6,6 +6,65 @@
 - 그리고 해당 jsp파일에 써있는 localhost:8080에 대한 IP주소를 실행시키는 톰캣서버에 맞춰 변경하거나 유지한다.
 - 위의 모든 상황에도 안된다면 그냥 git에서 다시 받는 것을 추천.
 
+#### 20210923(목) 교육
+- 데이터베이스 객체 8가지 = 테이블, 인덱스, 뷰, 시노님, 시퀀스, 함수, 프로시저, 패키지
+- 테이블 : 데이터 저장소
+- 인덱스 : 검색속도향상(최종목적), 작은테이블
+- 뷰 : readonly table
+- 시노님 : 테이블의 별명
+- 시퀀스 : 순번 자동생성기
+
+- 예로 1.25GB정도의 db를 select해서 table 전체를 읽어들인다면 loading시간과 searching시간이 걸리는데 만약 내가 찾는 데이터가 가장 마지막에 있는 데이터라면 한줄한줄읽는 db의 특성상 걸리는 시간도 어마어마하다. 게다가 where조건절에 조건을 더 추가한다면 엄청난 시간이 걸린다.
+- create index idx_name_mobile on tbl(name,mobile) 
+- 위처럼하면 작은 테이블이 생성된다. name, mobile 2개의 컬럼을 가진 테이블이 생성됨.그리고 각자의 테이블 데이터가 포인터로 가리킨다. 포인터는 데이터가 들어있는 table의 위치주소를 가지고 있다.
+- 만약 select * from tbl where name='강감찬' and mobile like '010%'라고 한다면 모든 테이블을 다 로드하고 서치하지 않고 생성된 인덱스가 있는지 먼저 찾는다. 그리고 인덱스를 찾는다면 그 인덱스에서 조건에 맞는 데이터를 서치한다.
+- 이처럼 인덱스가 생성되어있다면 1.25GB가 아니라 그보다 훨씬 적은 인덱스만큼의 데이터를 로드하고 서치시간도 그만큼 훨씬 짧아진다.
+- 그런데 만약 select * from tbl where name='방재혁' and birthday='940505'를 검색하는데 만약 이에 해당하는 index가 없다면??
+- 또 똑같이 모든 table데이터를 다 로드하고 다 읽어들인다. 엄청 느리다. 그래서 다른 where조건의 index를 또 만들어야한다. index테이블은 무제한 생성가능하다.
+- 인덱스의 종류 : 유니크 인덱스, non유니크인덱스
+- unique-index : 모든 데이터가 각자 하나씩 밖에 없다.
+- non-unique index : 인덱스에서 table 데이터 주소만 다르고 중복된 값이 있는 인덱스
+- create unique index idx_name_birthday on tbl(name,birthday) = error가 난다. 즉, 중복값이 있다는 뜻.
+- unique index가 검색속도가 제일 빠르다. 중복된 값이 없어서 찾으면 끝.
+- non-unique는 중복된 값이 허용되기 때문에 검색속도가 느리다. 잘써야한다. 잘못하면 효율이 떨어지는 인덱스가 될 수 있다.
+- 컬럼 하나로만 인덱스를 만들 수 있다. create index idx_name on member(name);
+- drop index idx_name_mobile; -> 이렇게하면 인덱스 테이블을 삭제할 수 있다.
+
+- Primary Key(기본키) : 단일컬럼, not null, 값이 불변, unique(중복되는 값이 허용되는 컬럼은 안된다. ex)name, gender 등)
+- 가장 기본적인 인덱스.
+- 모든 테이블에는 Primary Key를 만들어주는게 좋다.
+- 테이블 당 하나만 지정가능하다. 혹은 PrimaryKey가 없어도된다. 단, 2개 이상은 안된다.
+- alter table '테이블명' add primary key (컬럼명);
+- 외래키(foreign key) : 다른 테이블의 기본키로서, 그 테이블의 데이터를 특정할 수 있다.
+- ex) room테이블에 있는 type컬럼은 roomtype테이블의 typecode컬럼 기본키이다.
+- 다른테이블의 기본키 값이 한 테이블의 데이터로 사용된다. 그래서 외래키만으로 기본키설정되어있는 다른 테이블의 데이터를 불러올 수 있다.
+- 외래키와 기본키는 모두 유일한 값이다.(기본키로 사용된 테이블에서)
+- 조인은 외래키와 기본키의 결합으로 많이 한다.
+
+- 그룹함수(집계함수) : sum, min/max, count, avg, stddev(표준편차), variance(분산)
+- 묶어서 통계를 낼때 나타남. group by와 주로 함께 쓴다.
+- group by 다음에 나타는 컬럼은 집계함수 다음 나오는 모든 컬럼들을 다 써야한다.
+- select count(*), department_name from employees group by department_name;
+- 집계함수 다음에 쓴 것들을 순서 그대로 group by 뒤에도 쓰면된다.
+
+- GUI(Graphic User Interface) : 사용자가 편리하게 사용할 수 있도록 입출력 등의 기능을 그래픽으로 표시한것.
+- UX(User eXperience) : 사용자가 제품/서비스를 이용하면서 느끼고 생각하게 되는 총체적 경험.
+- UI(User Interface) :  사용자가 제품/서비스를 사용할 때 눈으로 마주치는 면
+
+- 파이썬 : 크롤링(crawling) : 인터넷을 기어다니다. 수많은 웹서버들을 방문하면서 데이터를 수집하는 행위.
+
+- 통합테스트 : 모든 모듈을 합쳐서 종합적으로 테스트(어플리케이션이 잘 작동하는가, 프로그램이 잘 작동하는가)
+- 단위테스트 : 각 모듈별로 테스트(함수, 패키지)
+
+- API(Application Programming Interface)
+- 함수(메소드) : 특정작업을 수행
+- 리퀘스트매핑함수가 있고
+- http://localhost:8080/app/list <- 오픈(open)API 오픈API를 작동시키면 해당되는 메소드가 호출된다.
+- 여기서는 list라는 메소드가 호출됨.
+- API잘 모르겠다. 그냥 메소드가 호출되는 것.
+
+
+
 #### 20210910(금) 작업
 - xml파일에서 원하는 작업(CRUD)의 sql문을 만들때 다른 테이블끼리 조인하기도하고, 테이블3개를 조인하기도한다. 복잡하겠지만 각각의 sql문을 잘 살펴보자.
 - 오늘은 내가 만든 프로젝트의 css를 다듬어보자. 

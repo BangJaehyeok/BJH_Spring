@@ -35,8 +35,8 @@ background-size: cover;">
         <span id="findRoom">
      <p style="font-size: 24px;">객실예약조회</p><br>   
         숙박기간&nbsp;&nbsp;
-        <input type="date" id="date1">~
-        <input type="date" id="date2">
+        <input type="date" id="date1" min='2021-10-01'>~
+        <input type="date" id="date2" min=today>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;        
         객실종류&nbsp;&nbsp;
